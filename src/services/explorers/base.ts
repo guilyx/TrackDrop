@@ -289,6 +289,7 @@ class BaseService extends ExplorerService {
 
     const transfers: Transfer[] = await this.getAllTransfers(address);
 
+    console.log(transfers.length);
     transfers.forEach((transfer: Transfer) => {
       if (transfer.token === null) return;
       transactions.forEach((transaction: Transaction) => {
