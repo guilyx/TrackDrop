@@ -44,7 +44,7 @@ To get `txTracker` up and running locally on your machine, follow these steps:
    npm run dev
    ```
 
-2. Open your browser and navigate to `http://localhost:5173` to view the Linea Explorer.
+2. Open your browser and navigate to `http://localhost:5173` to view the txTracker web app.
 
 ### Building for Production
 
