@@ -49,10 +49,11 @@ const HomePage = () => {
               />
               <button
                 onClick={handleSubmit}
-                className="text-white absolute right-2.5 bottom-2.5 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
+                className="text-white absolute right-2.5 bottom-2.5 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 bg-pink-500 bg-opacity-80 hover:bg-pink-600 focus:ring-pink-700"
               >
                 Search
               </button>
+
             </div>
           </div>
         </div>
