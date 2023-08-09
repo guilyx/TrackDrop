@@ -23,7 +23,6 @@ const VolumeCard: FC<VolumeCardProps> = ({ address, transactions }) => {
           parseInt(a.amount) * 10 ** -a.token.decimals * a.token.price,
       );
       if (transfers.length === 0) return;
-      console.log(transfers[0].token.symbol);
       const tmpVolume = parseInt(transfers[0].amount) * 10 ** -transfers[0].token.decimals * transfers[0].token.price;
       setVolume((prev) => prev + tmpVolume);
       if (new Date(transaction.receivedAt).getTime() >= new Date().getTime() - 86400 * 7 * 1000) {

@@ -3,10 +3,10 @@ import { Token, Transfer, Transaction } from './explorer.ts';
 import ExplorerService from './explorer.ts';
 import StandardExplorerService from './standard_explorer.ts';
 
-class MantleExplorerService extends StandardExplorerService {
+class TaikoExplorerService extends StandardExplorerService {
   constructor() {
-    super('explorer.mantle.xyz', "mantle");
+    super('explorer.test.taiko.xyz', "taiko");
   }
 }
 
-export default MantleExplorerService;
+export default TaikoExplorerService;

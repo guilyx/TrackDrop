@@ -3,10 +3,10 @@ import { Token, Transfer, Transaction } from './explorer.ts';
 import ExplorerService from './explorer.ts';
 import StandardExplorerService from './standard_explorer.ts';
 
-class MantleExplorerService extends StandardExplorerService {
+class ScrollExplorerService extends StandardExplorerService {
   constructor() {
-    super('explorer.mantle.xyz', "mantle");
+    super('blockscout.scroll.io', "scroll");
   }
 }
 
-export default MantleExplorerService;
+export default ScrollExplorerService;

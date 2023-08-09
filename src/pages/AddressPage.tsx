@@ -5,21 +5,39 @@ import ChainTabs from '../components/ChainTabs.tsx'; // Update the path accordin
 import { Transaction } from '../services/explorers/explorer.ts'
 
 import ExplorerService from '../services/explorers/explorer.ts';
-import ZkSyncService from '../services/explorers/zksync.ts'; // Import the appropriate services
-import BaseService from '../services/explorers/base.ts';
 
 import InteractionsCard from '../components/InteractionsCard.tsx'; // Update the path accordingly
 import FeeCard from '../components/FeeCard.tsx';
 import VolumeCard from '../components/VolumeCard.tsx';
 
+import MantleExplorerService from '../services/explorers/mantle.ts';
+import TaikoExplorerService from '../services/explorers/taiko.ts';
+import ScrollExplorerService from '../services/explorers/scroll.ts';
+import BaseExplorerService from '../services/explorers/base.ts';
+import ZkEvmExplorerService from '../services/explorers/zkevm.ts';
+import ZkSyncExplorerService from '../services/explorers/zksync.ts'; // Import the appropriate services
+import LineaExplorerService from '../services/explorers/linea.ts';
+
 const AddressPage = () => {
   const address = window.location.search.split('=')[1];
 
-  const zkSyncService = new ZkSyncService();
-  const baseService = new BaseService();
+  const zkSyncService = new ZkSyncExplorerService();
+  const zkEvmService = new ZkEvmExplorerService();
+  const baseService = new BaseExplorerService();
+  const lineaService = new LineaExplorerService();
+  const mantleService = new MantleExplorerService();
+  const taikoService = new TaikoExplorerService();
+  const scrollService = new ScrollExplorerService();
+
   const availableExplorers: Map<string, ExplorerService> = new Map();
   availableExplorers.set('zkSync', zkSyncService);
+  availableExplorers.set('zkEvm', zkEvmService);
   availableExplorers.set('Base', baseService);
+  availableExplorers.set('Linea', lineaService);
+  availableExplorers.set('Mantle', mantleService);
+  availableExplorers.set("Scroll (TN)", scrollService);
+  availableExplorers.set("Taiko (TN)", taikoService);
+
 
   const [selectedTab, setSelectedTab] = useState('');
   const [transactionLists, setTransactionLists] = useState<Record<string, Transaction[]>>({});
