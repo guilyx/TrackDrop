@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import ExplorerService, { Transaction, Token, Transfer } from './explorer.ts';
 
-class ZkSyncService extends ExplorerService {
+class ZkSyncExplorerService extends ExplorerService {
   async getTokenList(address: string): Promise<Token[]> {
     return axios
       .get(`https://zksync2-mainnet.zkscan.io/api?module=account&action=tokenlist&address=${address}`)
@@ -9,7 +9,7 @@ class ZkSyncService extends ExplorerService {
         return res.data.result;
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   }
 
@@ -37,31 +37,6 @@ class ZkSyncService extends ExplorerService {
       }
     }
     return transfers;
-  }
-
-  async assignTransferValues(transactions: Transaction[]) {
-    const ethResponse = await axios.post('https://mainnet.era.zksync.io/', {
-      id: 42,
-      jsonrpc: '2.0',
-      method: 'zks_getTokenPrice',
-      params: ['0x0000000000000000000000000000000000000000'],
-    });
-
-    const tokensPrice: any = {
-      USDC: 1,
-      USDT: 1,
-      ZKUSD: 1,
-      CEBUSD: 1,
-      LUSD: 1,
-      ETH: parseInt(ethResponse.data.result),
-    };
-
-    transactions.forEach((transaction: Transaction) => {
-      transaction.transfers.forEach((transfer: Transfer) => {
-        transfer.token.price = tokensPrice[transfer.token.symbol.toUpperCase()];
-      });
-      transaction.transfers = transaction.transfers.filter((transfer: Transfer) => transfer.token.price !== undefined);
-    });
   }
 
   async getTransactionsList(address: string): Promise<Transaction[]> {
@@ -125,4 +100,4 @@ class ZkSyncService extends ExplorerService {
   }
 }
 
-export default ZkSyncService;
+export default ZkSyncExplorerService;

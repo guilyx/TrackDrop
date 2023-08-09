@@ -14,6 +14,9 @@ const VolumeCard: FC<VolumeCardProps> = ({ address, transactions }) => {
     setChange(0);
     setVolume(0);
     transactions.forEach((transaction) => {
+      // For all transfers in transaction.transfer, print amount
+      // Highly likely that it fucks up bc tokens have no price tho
+      // Move on to new chain until fixed
       const transfers = transaction.transfers.sort(
         (a, b) =>
           parseInt(b.amount) * 10 ** -b.token.decimals * b.token.price -

@@ -3,10 +3,10 @@ import { Token, Transfer, Transaction } from './explorer.ts';
 import ExplorerService from './explorer.ts';
 import StandardExplorerService from './standard_explorer.ts';
 
-class BaseExplorerService extends StandardExplorerService {
+class MantleExplorerService extends StandardExplorerService {
   constructor() {
-    super("api.basescan.org", "base");
+    super('explorer.mantle.xyz', "mantle");
   }
 }
 
-export default BaseExplorerService;
+export default MantleExplorerService;

@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export interface Token {
   price: number | undefined;
   balance: number;
@@ -49,7 +51,33 @@ class ExplorerService {
   }
 
   async assignTransferValues(transactions: Transaction[]) {
-    throw new Error('getTransactionsList method must be implemented in derived classes.');
+    const ethResponse = await axios.post('https://mainnet.era.zksync.io/', {
+      id: 42,
+      jsonrpc: '2.0',
+      method: 'zks_getTokenPrice',
+      params: ['0x0000000000000000000000000000000000000000'],
+    });
+
+    const tokensPrice: any = {
+      USDC: 1,
+      USDT: 1,
+      ZKUSD: 1,
+      CEBUSD: 1,
+      LUSD: 1,
+      ETH: parseInt(ethResponse.data.result),
+      WETH: parseInt(ethResponse.data.result),
+      lETH: parseInt(ethResponse.data.result),
+      z0WETH: parseInt(ethResponse.data.result),
+      BUSD: 1,
+    };
+
+    transactions.forEach((transaction: Transaction) => {
+      transaction.ethValue = tokensPrice['ETH'];
+      transaction.transfers.forEach((transfer: Transfer) => {
+        transfer.token.price = tokensPrice[transfer.token.symbol.toUpperCase()];
+      });
+      transaction.transfers = transaction.transfers.filter((transfer: Transfer) => transfer.token.price !== undefined);
+    });
   }
 
   async getTransactionsList(address: string): Promise<Transaction[]> {
