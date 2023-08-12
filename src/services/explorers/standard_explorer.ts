@@ -117,7 +117,7 @@ class StandardExplorerService extends ExplorerService {
 
     for (const specializedTransaction of response) {
       const gas_price = Number(specializedTransaction.gasPrice);
-      const gas = Number(specializedTransaction.gas);
+      const gas = Number(specializedTransaction.gasUsed);
       const fee = gas * gas_price;
       const commonTransaction: Transaction = {
         hash: specializedTransaction.hash,
