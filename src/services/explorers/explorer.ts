@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getTokenPrice } from '../tokenPrice.ts';
 
 export interface Token {
   price: number | undefined;
@@ -71,11 +72,20 @@ class ExplorerService {
       BUSD: 1,
     };
 
-    transactions.forEach((transaction: Transaction) => {
+    transactions.forEach(async (transaction: Transaction) => {
       transaction.ethValue = tokensPrice['ETH'];
-      transaction.transfers.forEach((transfer: Transfer) => {
-        transfer.token.price = tokensPrice[transfer.token.symbol.toUpperCase()];
-      });
+
+      for (const transfer of transaction.transfers) {
+        if (!(transfer.token.symbol.toUpperCase() in tokensPrice)) {
+          const tokenPrice = await getTokenPrice(transfer.tokenAddress);
+          if (tokenPrice !== undefined) {
+            transfer.token.price = tokenPrice;
+          }
+        } else {
+          transfer.token.price = tokensPrice[transfer.token.symbol.toUpperCase()];
+        }
+      }
+
       transaction.transfers = transaction.transfers.filter((transfer: Transfer) => transfer.token.price !== undefined);
     });
   }
