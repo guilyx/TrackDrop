@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { Token, Transfer, Transaction } from './explorer.ts';
 import ExplorerService from './explorer.ts';
 
-interface StandardToken {
+export interface StandardToken {
   balance: number;
   contractAddress: string;
   decimals: number;
@@ -10,7 +10,7 @@ interface StandardToken {
   symbol: string;
 }
 
-interface StandardTokenTransfer {
+export interface StandardTokenTransfer {
   blockHash: string;
   blockNumber: string;
   confirmations: string;
@@ -33,8 +33,7 @@ interface StandardTokenTransfer {
   value: string;
   values: string[];
 }
-
-interface StandardTransaction {
+export interface StandardTransaction {
   blockHash: string;
   blockNumber: string;
   confirmations: string;
@@ -48,7 +47,7 @@ interface StandardTransaction {
   input: string;
   isError: '0' | '1';
   nonce: string;
-  timeStamp: string;
+  timestamp: string;
   to: string;
   transactionIndex: string;
   txreceipt_status: '0' | '1';
@@ -57,10 +56,10 @@ interface StandardTransaction {
 
 class StandardExplorerService extends ExplorerService {
   uri: string;
-  name: string
+  name: string;
 
-  constructor(uri: string, name: string) {
-    super();
+  constructor(uri: string, name: string, explorer_url: string) {
+    super(explorer_url);
     this.uri = uri;
     this.name = name;
   }
@@ -165,6 +164,8 @@ class StandardExplorerService extends ExplorerService {
         break;
       }
     }
+
+    console.log(tokens);
 
     return tokens;
   }

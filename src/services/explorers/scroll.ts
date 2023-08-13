@@ -5,7 +5,7 @@ import StandardExplorerService from './standard_explorer.ts';
 
 class ScrollExplorerService extends StandardExplorerService {
   constructor() {
-    super('blockscout.scroll.io', "scroll");
+    super('blockscout.scroll.io', "scroll", 'https://blockscout.scroll.io/');
   }
 }
 

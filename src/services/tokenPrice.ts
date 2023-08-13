@@ -1,6 +1,20 @@
 import axios from 'axios';
 
-export async function getTokenPrice(contract_hash: string): Promise<number | undefined> {
+export type TokenPriceCache = Map<string, number>;
+
+const tokenPriceInProgress: Map<string, Promise<number | undefined>> = new Map();
+
+const cache: TokenPriceCache = new Map();
+
+function setCacheTokenPrice(hash: string, price: number): void {
+  cache.set(hash, price);
+}
+
+function getCacheTokenPrice(hash: string): number | undefined {
+  return cache.get(hash);
+}
+
+async function fetchTokenPrice(contract_hash: string): Promise<number | undefined> {
   try {
     const response = await axios.get(`https://api.dexscreener.io/latest/dex/tokens/${contract_hash}`);
     if (response.status != 200) {
@@ -13,8 +27,10 @@ export async function getTokenPrice(contract_hash: string): Promise<number | und
     }
 
     for (const pair of response.data.pairs) {
-      if (pair.baseToken.address === contract_hash) {
-        const tokenPrice = Number(response.data.pairs[0].priceUsd);
+      const token = String(pair.baseToken.address).toLowerCase();
+      if (token === contract_hash.toLowerCase()) {
+        const tokenPrice = Number(pair.priceUsd);
+        setCacheTokenPrice(contract_hash, tokenPrice);
         return tokenPrice;
       }
     }
@@ -24,4 +40,23 @@ export async function getTokenPrice(contract_hash: string): Promise<number | und
     console.error('Error fetching token price:', error);
     return undefined;
   }
+}
+
+export async function getTokenPrice(contract_hash: string): Promise<number | undefined> {
+  const cachedPrice = getCacheTokenPrice(contract_hash);
+  if (cachedPrice !== undefined) {
+    return cachedPrice;
+  }
+
+  if (tokenPriceInProgress.has(contract_hash)) {
+    return tokenPriceInProgress.get(contract_hash)!;
+  }
+
+  const pricePromise = fetchTokenPrice(contract_hash);
+  tokenPriceInProgress.set(contract_hash, pricePromise);
+
+  // Once the promise resolves, update cache and map
+  const price = await pricePromise;
+  tokenPriceInProgress.delete(contract_hash); // Remove from in-progress map
+  return price;
 }

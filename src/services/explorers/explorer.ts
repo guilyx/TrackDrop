@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getTokenPrice } from '../tokenPrice.ts';
+import { setCommonTokenPrice, getCommonTokenPrice, hasCommonTokenPrice } from '../../common/common.ts';
 
 export interface Token {
   price: number | undefined;
@@ -9,6 +10,7 @@ export interface Token {
   name: string;
   symbol: string;
   type: string;
+  balanceUsd: number | undefined;
 }
 
 export interface Transfer {
@@ -26,7 +28,7 @@ export interface Transfer {
     symbol: string;
     name: string;
     decimals: number;
-    price: number;
+    price: number | undefined;
   };
 }
 
@@ -39,10 +41,16 @@ export interface Transaction {
   fee: string;
   receivedAt: string;
   transfers: Transfer[];
-  ethValue: number;
+  ethValue: number | undefined;
 }
 
 class ExplorerService {
+  explorer_url: string
+
+  constructor(explorer_url: string) {
+    this.explorer_url = explorer_url;
+  }
+
   async getTokenList(address: string): Promise<Token[]> {
     throw new Error('getTransactionsList method must be implemented in derived classes.');
   }
@@ -59,30 +67,28 @@ class ExplorerService {
       params: ['0x0000000000000000000000000000000000000000'],
     });
 
-    const tokensPrice: any = {
-      USDC: 1,
-      USDT: 1,
-      ZKUSD: 1,
-      CEBUSD: 1,
-      LUSD: 1,
-      ETH: parseInt(ethResponse.data.result),
-      WETH: parseInt(ethResponse.data.result),
-      lETH: parseInt(ethResponse.data.result),
-      z0WETH: parseInt(ethResponse.data.result),
-      BUSD: 1,
-    };
+    setCommonTokenPrice("USDC", 1);
+    setCommonTokenPrice("USDT", 1);
+    setCommonTokenPrice("ZKUSD", 1);
+    setCommonTokenPrice("CEBUSD", 1);
+    setCommonTokenPrice("LUSD", 1);
+    setCommonTokenPrice("ETH", parseInt(ethResponse.data.result));
+    setCommonTokenPrice("WETH", parseInt(ethResponse.data.result));
+    setCommonTokenPrice("lETH", parseInt(ethResponse.data.result));
+    setCommonTokenPrice("z0WETH", parseInt(ethResponse.data.result));
+    setCommonTokenPrice("BUSD", 1);
 
     transactions.forEach(async (transaction: Transaction) => {
-      transaction.ethValue = tokensPrice['ETH'];
+      transaction.ethValue = getCommonTokenPrice('ETH');
 
       for (const transfer of transaction.transfers) {
-        if (!(transfer.token.symbol.toUpperCase() in tokensPrice)) {
+        if (!hasCommonTokenPrice(transfer.token.symbol.toUpperCase())) {
           const tokenPrice = await getTokenPrice(transfer.tokenAddress);
           if (tokenPrice !== undefined) {
             transfer.token.price = tokenPrice;
           }
         } else {
-          transfer.token.price = tokensPrice[transfer.token.symbol.toUpperCase()];
+          transfer.token.price = getCommonTokenPrice(transfer.token.symbol.toUpperCase());
         }
       }
 

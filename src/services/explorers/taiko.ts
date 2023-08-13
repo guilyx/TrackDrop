@@ -5,7 +5,7 @@ import StandardExplorerService from './standard_explorer.ts';
 
 class TaikoExplorerService extends StandardExplorerService {
   constructor() {
-    super('explorer.test.taiko.xyz', "taiko");
+    super('explorer.test.taiko.xyz', "taiko", 'https://explorer.test.taiko.xyz');
   }
 }
 

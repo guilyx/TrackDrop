@@ -5,7 +5,7 @@ import StandardExplorerService from './standard_explorer.ts';
 
 class LineaExplorerService extends StandardExplorerService {
   constructor() {
-    super('api.lineascan.build', "linea");
+    super('api.lineascan.build', "linea", 'https://explorer.linea.build');
   }
 }
 

@@ -2,6 +2,9 @@ import axios, { AxiosResponse } from 'axios';
 import ExplorerService, { Transaction, Token, Transfer } from './explorer.ts';
 
 class ZkSyncExplorerService extends ExplorerService {
+  constructor() {
+    super('https://explorer.zksync.io');
+  }
   async getTokenList(address: string): Promise<Token[]> {
     return axios
       .get(`https://zksync2-mainnet.zkscan.io/api?module=account&action=tokenlist&address=${address}`)
