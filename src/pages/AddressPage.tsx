@@ -2,13 +2,16 @@ import { useEffect, useState } from 'react';
 import Header from '../components/Header.tsx'; // Update the path accordingly
 import ChainTabs from '../components/ChainTabs.tsx'; // Update the path accordingly
 
-import { Transaction } from '../services/explorers/explorer.ts'
+import { Transaction, Token } from '../services/explorers/explorer.ts'
 
 import ExplorerService from '../services/explorers/explorer.ts';
 
 import InteractionsCard from '../components/InteractionsCard.tsx'; // Update the path accordingly
 import FeeCard from '../components/FeeCard.tsx';
 import VolumeCard from '../components/VolumeCard.tsx';
+import BalanceCard from '../components/BalanceCard.tsx';
+import ActivityCard from '../components/ActivityCard.tsx';
+import { getTokenPrice } from '../services/tokenPrice.ts';
 
 import MantleExplorerService from '../services/explorers/mantle.ts';
 import TaikoExplorerService from '../services/explorers/taiko.ts';
@@ -41,21 +44,34 @@ const AddressPage = () => {
 
   const [selectedTab, setSelectedTab] = useState('');
   const [transactionLists, setTransactionLists] = useState<Record<string, Transaction[]>>({});
+  const [tokenList, setTokenList] = useState<Record<string, Token[]>>({});
+
 
   useEffect(() => {
     if (!address || address.length !== 42 || address.slice(0, 2) !== '0x') {
       window.location.search = '';
       return;
     }
-    fetchTransactionList();
+    fetchAddressInformations();
   }, [address]);
 
-  const fetchTransactionList = async () => {
+  const fetchAddressInformations = async () => {
     const newTransactionLists: Record<string, Transaction[]> = {};
+    const newTokenList: Record<string, Token[]> = {};
     for (const [tabName, service] of availableExplorers) {
-      const transactions = await service.getTransactionsList(address);
+      const main_token = await service.fetchMainToken(address);
+      const transactions = await service.fetchTransactions(address);
+
+      newTokenList[tabName] = [];
       newTransactionLists[tabName] = transactions;
+      
+  
+      // Merge main_token into existing list or create a new one
+      if (main_token) {
+        newTokenList[tabName].push(main_token);
+      }
     }
+    setTokenList(newTokenList);
     setTransactionLists(newTransactionLists);
   };
 
@@ -69,12 +85,21 @@ const AddressPage = () => {
     }
 
     const selectedTransactions = transactionLists[selectedTab] || [];
+    const tokens = tokenList[selectedTab] || [];
+    let maybe_explorer = availableExplorers.get(selectedTab)?.explorer_url;
+    const explorer: string = maybe_explorer !== undefined ? maybe_explorer : '';
     
     return (
-      <div className="flex items-center flex-row space-x-5 mt-5">
-        <InteractionsCard address={address} transactions={selectedTransactions} />
-        <VolumeCard address={address} transactions={selectedTransactions} />
-        <FeeCard address={address} transactions={selectedTransactions} />
+      <div className="grid mt-5 place-items-center ">
+        <div className="flex items-center flex-row space-x-5 mt-5">
+          <InteractionsCard address={address} transactions={selectedTransactions} />
+          <VolumeCard address={address} transactions={selectedTransactions} />
+          <FeeCard address={address} transactions={selectedTransactions} />
+        </div>
+        <div className="flex items-center flex-row space-x-5 mt-1.5">
+          <BalanceCard address={address} onTokens={tokens} explorer={explorer}/>
+          <ActivityCard address={address} transactions={selectedTransactions} />
+        </div>
       </div>
     );
   };

@@ -1,16 +1,18 @@
 import axios, { AxiosResponse } from 'axios';
 import { Token, Transfer, Transaction } from './explorer.ts';
 import ExplorerService from './explorer.ts';
+import { getTokenPrice } from '../tokenPrice.ts';
 
-interface StandardToken {
+export interface StandardToken {
   balance: number;
   contractAddress: string;
   decimals: number;
   name: string;
   symbol: string;
+  type: string;
 }
 
-interface StandardTokenTransfer {
+export interface StandardTokenTransfer {
   blockHash: string;
   blockNumber: string;
   confirmations: string;
@@ -33,8 +35,7 @@ interface StandardTokenTransfer {
   value: string;
   values: string[];
 }
-
-interface StandardTransaction {
+export interface StandardTransaction {
   blockHash: string;
   blockNumber: string;
   confirmations: string;
@@ -57,12 +58,10 @@ interface StandardTransaction {
 
 class StandardExplorerService extends ExplorerService {
   uri: string;
-  name: string
 
-  constructor(uri: string, name: string) {
-    super();
+  constructor(uri: string, name: string, explorer_url: string, chain_token: Token) {
+    super(explorer_url, name, chain_token);
     this.uri = uri;
-    this.name = name;
   }
 
   convertToCommonTokens(response: StandardToken[]): Token[] {
@@ -76,7 +75,8 @@ class StandardExplorerService extends ExplorerService {
         decimals: specializedToken.decimals,
         name: specializedToken.name,
         symbol: specializedToken.symbol,
-        type: 'Standard',
+        type: specializedToken.type,
+        balanceUsd: undefined,
       };
       commonTokens.push(commonToken);
     }
@@ -231,7 +231,7 @@ class StandardExplorerService extends ExplorerService {
     }
 
     const transfers: Transfer[] = await this.getAllTransfers(address);
-
+    
     transfers.forEach((transfer: Transfer) => {
       if (transfer.token === null) return;
       transactions.forEach((transaction: Transaction) => {
@@ -242,8 +242,40 @@ class StandardExplorerService extends ExplorerService {
     });
 
     await this.assignTransferValues(transactions);
+    const sortedTransactions = transactions.sort((a, b) => Number(b.receivedAt) - Number(a.receivedAt));
+    return sortedTransactions;
+  }
 
-    return transactions;
+  async getMainToken(address: string): Promise<Token | undefined> {
+    try {
+      const response: AxiosResponse = await axios.get(
+        `https://${this.uri}/api?module=account&action=balance&address=${address}`,
+      );
+
+      if (response.status === 200) {
+        const token: Token = {
+          contractAddress: this.chain_token.contractAddress,
+          type: this.chain_token.type,
+          balance: response.data.result,
+          decimals: this.chain_token.decimals,
+          name: this.chain_token.name,
+          symbol: this.chain_token.symbol,
+          price: await getTokenPrice(this.chain_token.contractAddress),
+          balanceUsd: undefined,
+        };
+
+        if (token.price) token.balanceUsd = token.balance * 10 ** -token.decimals * token.price;
+        this.chain_token.balance = token.balance;
+        this.chain_token.price = token.price;
+        this.chain_token.balanceUsd = token.balanceUsd;
+
+        return token;
+      } else {
+        console.error('Error occurred while retrieving %s.', this.chain_token.symbol);
+      }
+    } catch (error) {
+      console.error('Error occurred while making the request:', error);
+    }
   }
 }
 

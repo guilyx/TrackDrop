@@ -17,6 +17,7 @@ const ChainTabs: React.FC<ChainTabsProps> = ({ selectedTab, setSelectedTab }) =>
     { name: 'zkEvm', logo: './chains/zkevm.svg' },
     { name: 'Mantle', logo: './chains/mantle.svg' },
     { name: 'Base', logo: './chains/base.svg' },
+    { name: 'Zora (UC)', logo: './chains/zora.svg'},
     // { name: 'StarkNet (UC)', logo: './chains/starknet.svg' },
     { name: 'Scroll (TN)', logo: './chains/scroll.svg' },
     { name: 'Taiko (TN)', logo: './chains/taiko.svg'},
