@@ -90,8 +90,8 @@ const AddressPage = () => {
     const explorer: string = maybe_explorer !== undefined ? maybe_explorer : '';
     
     return (
-      <div className="grid mt-5 place-items-center ">
-        <div className="flex items-center flex-row space-x-5 mt-5">
+      <div className="grid place-items-center">
+        <div className="flex items-center flex-row space-x-4">
           <InteractionsCard address={address} transactions={selectedTransactions} />
           <VolumeCard address={address} transactions={selectedTransactions} />
           <FeeCard address={address} transactions={selectedTransactions} />

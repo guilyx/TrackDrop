@@ -43,7 +43,7 @@ const ChainTabs: React.FC<ChainTabsProps> = ({ selectedTab, setSelectedTab }) =>
 
   return (
     <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-      <div className="flex items-center flex-row space-x-5 mt-5">{tabInfo.map((tab) => renderTabButton(tab))}</div>
+      <div className="flex items-center flex-row space-x-5">{tabInfo.map((tab) => renderTabButton(tab))}</div>
     </div>
   );
 };
