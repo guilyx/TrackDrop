@@ -126,7 +126,6 @@ class ExplorerService {
     return token;
   }
 
-
   async fetchTransfers(address: string): Promise<Transfer[]> {
     const cachedTfs = this.getCacheTf(address);
     if (cachedTfs !== undefined) {
@@ -147,15 +146,18 @@ class ExplorerService {
   }
 
   async getMainToken(address: string): Promise<Token | undefined> {
-    throw new Error('getMainToken method must be implemented in derived class');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    throw new Error('getMainToken method must be implemented in derived class' + address);
   }
 
   async getTokenList(address: string): Promise<Token[]> {
-    throw new Error('getTransactionsList method must be implemented in derived classes.');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    throw new Error('getTransactionsList method must be implemented in derived classes.' + address);
   }
 
   async getAllTransfers(address: string): Promise<Transfer[]> {
-    throw new Error('getTransactionsList method must be implemented in derived classes.');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    throw new Error('getTransactionsList method must be implemented in derived classes.' + address);
   }
 
   async assignTransferValues(transactions: Transaction[]) {
@@ -196,19 +198,23 @@ class ExplorerService {
   }
 
   async getTransactionsList(address: string): Promise<Transaction[]> {
-    throw new Error('getTransactionsList method must be implemented in derived classes.');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    throw new Error('getTransactionsList method must be implemented in derived classes.' + address);
   }
 
   convertToCommonTokens(response: any): Token[] {
-    throw new Error('convertToCommonTokens method must be implemented in derived classes.');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    throw new Error('convertToCommonTokens method must be implemented in derived classes.' + response);
   }
 
   convertToCommonTransaction(response: any): Transaction[] {
-    throw new Error('convertToCommonTransaction method must be implemented in derived classes.');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    throw new Error('convertToCommonTransaction method must be implemented in derived classes.' + response);
   }
 
   convertToCommonTransfer(response: any): Transfer[] {
-    throw new Error('convertToCommonTransfer method must be implemented in derived classes.');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    throw new Error('convertToCommonTransfer method must be implemented in derived classes.' + response);
   }
 }
 

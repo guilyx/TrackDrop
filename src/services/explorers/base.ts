@@ -1,7 +1,7 @@
-import axios, { AxiosResponse } from 'axios';
-import { Token, Transfer, Transaction } from './explorer.ts';
-import ExplorerService from './explorer.ts';
 import StandardExplorerService from './standard_explorer.ts';
+import axios from 'axios';
+import { AxiosResponse } from 'axios';
+import { Token } from './explorer.ts';
 import { ETH_TOKEN } from '../../common/common.ts';
 class BaseExplorerService extends StandardExplorerService {
   constructor() {

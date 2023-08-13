@@ -11,7 +11,6 @@ import FeeCard from '../components/FeeCard.tsx';
 import VolumeCard from '../components/VolumeCard.tsx';
 import BalanceCard from '../components/BalanceCard.tsx';
 import ActivityCard from '../components/ActivityCard.tsx';
-import { getTokenPrice } from '../services/tokenPrice.ts';
 
 import MantleExplorerService from '../services/explorers/mantle.ts';
 import TaikoExplorerService from '../services/explorers/taiko.ts';
