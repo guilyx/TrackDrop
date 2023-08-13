@@ -1,41 +1,30 @@
 import { FC, useContext, useEffect, useState } from 'react';
-import { GlobalContext } from '../contexts/global_context.ts';
 import { getTokenPrice } from '../services/tokenPrice.ts';
 import { Token } from '../services/explorers/explorer.ts';
 
 interface TokensCardProps {
   address: string
-  tokenList: Token[]
+  onTokens: Token[]
   explorer: string
 }
 
-const TokensCard: FC<TokensCardProps> = ({ address, tokenList, explorer }) => {
+const TokensCard: FC<TokensCardProps> = ({ address, onTokens, explorer }) => {
   const [tokens, setTokens] = useState<Token[] | undefined>(undefined);
   const [totalBalanceUSD, setTotalBalanceUSD] = useState<number>(0);
-  const tokenContext = useContext(GlobalContext);
 
   useEffect(() => {
     const fetchTokens = async () => {
-      for (const token of tokenList) {
-        if (token.type === 'ERC-20' && token.symbol) {
-            const price = await getTokenPrice(token.contractAddress);
-            if (price !== undefined) {
-                token.price = price;
-            }
-        }
-      }
 
-      const totalUSD = tokenList.reduce((total, token) => {
-        if (token.price !== undefined && token.balance && token.decimals) {
-          const balanceUSD = token.price * (token.balance * 10 ** -token.decimals);
-          token.balanceUsd = balanceUSD;
+      const totalUSD = onTokens.reduce((total, token) => {
+        if (token.price !== undefined && token.balance && token.decimals && token.balanceUsd) {
+          const balanceUSD = token.balanceUsd;
           return total + balanceUSD;
         }
         return total;
       }, 0);
 
       setTokens(
-        tokenList
+        onTokens
           .sort((a, b) => {
             if (a.type === b.type) {
                 if (a.balanceUsd === undefined && b.balanceUsd === undefined) return 0;
@@ -54,11 +43,7 @@ const TokensCard: FC<TokensCardProps> = ({ address, tokenList, explorer }) => {
     };
 
     fetchTokens();
-  }, [address]);
-
-  useEffect(() => {
-    tokenContext?.setToken(tokens);
-  }, [tokens]);
+  }, [address, onTokens]);
 
   return (
     <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 h-[245px] overflow-auto scrollbar">

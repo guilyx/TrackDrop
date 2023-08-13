@@ -11,6 +11,7 @@ import FeeCard from '../components/FeeCard.tsx';
 import VolumeCard from '../components/VolumeCard.tsx';
 import BalanceCard from '../components/BalanceCard.tsx';
 import ActivityCard from '../components/ActivityCard.tsx';
+import { getTokenPrice } from '../services/tokenPrice.ts';
 
 import MantleExplorerService from '../services/explorers/mantle.ts';
 import TaikoExplorerService from '../services/explorers/taiko.ts';
@@ -58,10 +59,17 @@ const AddressPage = () => {
     const newTransactionLists: Record<string, Transaction[]> = {};
     const newTokenList: Record<string, Token[]> = {};
     for (const [tabName, service] of availableExplorers) {
-      const tokens = await service.getTokenList(address);
-      const transactions = await service.getTransactionsList(address);
+      const main_token = await service.fetchMainToken(address);
+      const transactions = await service.fetchTransactions(address);
+
+      newTokenList[tabName] = [];
       newTransactionLists[tabName] = transactions;
-      newTokenList[tabName] = tokens;
+      
+  
+      // Merge main_token into existing list or create a new one
+      if (main_token) {
+        newTokenList[tabName].push(main_token);
+      }
     }
     setTokenList(newTokenList);
     setTransactionLists(newTransactionLists);
@@ -82,14 +90,14 @@ const AddressPage = () => {
     const explorer: string = maybe_explorer !== undefined ? maybe_explorer : '';
     
     return (
-      <div className="grid mt-20 place-items-center ">
+      <div className="grid mt-5 place-items-center ">
         <div className="flex items-center flex-row space-x-5 mt-5">
           <InteractionsCard address={address} transactions={selectedTransactions} />
           <VolumeCard address={address} transactions={selectedTransactions} />
           <FeeCard address={address} transactions={selectedTransactions} />
         </div>
         <div className="flex items-center flex-row space-x-5 mt-1.5">
-          <BalanceCard address={address} tokenList={tokens} explorer={explorer} />
+          <BalanceCard address={address} onTokens={tokens} explorer={explorer}/>
           <ActivityCard address={address} transactions={selectedTransactions} />
         </div>
       </div>

@@ -1,10 +1,37 @@
 import axios, { AxiosResponse } from 'axios';
 import ExplorerService, { Transaction, Token, Transfer } from './explorer.ts';
+import { ETH_TOKEN } from '../../common/common.ts';
+import { getTokenPrice } from '../tokenPrice.ts';
 
 class ZkSyncExplorerService extends ExplorerService {
   constructor() {
-    super('https://explorer.zksync.io');
+    super('https://explorer.zksync.io', 'zksync', ETH_TOKEN);
   }
+
+  async getMainToken(address: string): Promise<Token | undefined> {
+    try {
+      const response: AxiosResponse = await axios.get(
+        `https://zksync2-mainnet.zkscan.io/api?module=account&action=balance&address=${address}`,
+      );
+
+      if (response.status === 200) {
+        (this.chain_token.balance = response.data.result),
+          (this.chain_token.price = await getTokenPrice(this.chain_token.contractAddress));
+        if (this.chain_token.price !== undefined) {
+          this.chain_token.balanceUsd =
+            this.chain_token.balance * 10 ** -this.chain_token.decimals * this.chain_token.price;
+        }
+        return this.chain_token;
+      } else {
+        console.error('Error occurred while retrieving %s.', this.chain_token.symbol);
+        return undefined;
+      }
+    } catch (error) {
+      console.error('Error occurred while making the request:', error);
+      return undefined;
+    }
+  }
+
   async getTokenList(address: string): Promise<Token[]> {
     return axios
       .get(`https://zksync2-mainnet.zkscan.io/api?module=account&action=tokenlist&address=${address}`)

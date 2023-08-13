@@ -2,9 +2,10 @@ import axios, { AxiosResponse } from 'axios';
 import { Token, Transfer, Transaction } from './explorer.ts';
 import ExplorerService from './explorer.ts';
 import StandardExplorerService from './standard_explorer.ts';
+import { ETH_TOKEN } from '../../common/common.ts';
 class BaseExplorerService extends StandardExplorerService {
   constructor() {
-    super('api.basescan.org', 'base', 'https://base.blockscout.com');
+    super('api.basescan.org', 'base', 'https://base.blockscout.com', ETH_TOKEN);
   }
 
   convertToCommonTokens(response: any): Token[] {
@@ -35,7 +36,7 @@ class BaseExplorerService extends StandardExplorerService {
     while (true) {
       try {
         const response: AxiosResponse = await axios.get(
-          `https://base.blockscout.com/api/v2/addresses/${address}/token-balances?page=${page}&limit=${limit}`,
+          `https://base.blockscout.com/api/v2/addresses/${address}/token-balances?page=${page}&offset=${limit}`,
         );
 
         if (response.status === 200) {
@@ -56,28 +57,8 @@ class BaseExplorerService extends StandardExplorerService {
       }
     }
 
-    try {
-      const response: AxiosResponse = await axios.get(
-        `https://api.basescan.org/api?module=account&action=balance&address=${address}`,
-      );
-
-      if (response.status === 200) {
-        const eth_token: Token = {
-          balance: response.data.result,
-          contractAddress: "0x4200000000000000000000000000000000000006",
-          decimals: 18,
-          name: "Ether",
-          symbol: "ETH",
-          type: "ERC-20",
-          price: undefined,
-        }
-        tokens.push(eth_token);
-      } else {
-        console.error('Error occurred while retrieving ETH.');
-      }
-    } catch (error) {
-      console.error('Error occurred while making the request:', error);
-    }
+    const main_token = await this.getMainToken(address);
+    if (main_token) tokens.push(main_token);
 
     return tokens;
   }
