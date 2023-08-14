@@ -1,4 +1,7 @@
 # txTracker
+![CI/CD](https://github.com/guilyx/txTracker/workflows/deploy/badge.svg)  
+[![codecov](https://codecov.io/gh/guilyx/txTracker/branch/master/graph/badge.svg)](https://codecov.io/gh/guilyx/txTracker)  
+![License](https://img.shields.io/github/license/guilyx/txTracker)
 
 Track your wallet's interactions on chains/protocols that will potentially airdrop their tokens. txTracker is a fork from `zkFlow`.
 

@@ -7,6 +7,8 @@
   "repository": "https://github.com/guilyx/txtracker",
   "homepage": "https://guilyx.github.io/txtracker/",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -19,6 +21,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "axios": "^1.4.0",
     "ethers": "^5.7.2",
+    "gh-pages": "^6.0.0",
     "prettier": "^2.8.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
