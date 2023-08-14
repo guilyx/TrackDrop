@@ -7,13 +7,6 @@ services:
       context: ..
       dockerfile: ./docker/Dockerfile
     ports:
-      - "5173:5173"
+      - "8080:8080"
     volumes:
       - ../:/app
-    networks:
-      - host
-
-networks:
-  host:
-    name: host
-    external: true
