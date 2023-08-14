@@ -40,7 +40,7 @@ Before you begin, make sure you have the following software installed on your sy
 3. Run the following command to build the Docker image using the provided Dockerfile:
 
    ```bash
-   docker-compose -f docker/docker-compose.yml build
+   docker-compose -f docker/docker-compose.yaml build
    ```
 
    This command will use the `Dockerfile` located in the `docker` directory to build the Docker image named `txtracker`.
@@ -50,7 +50,7 @@ Before you begin, make sure you have the following software installed on your sy
 1. After successfully building the Docker image, you can run the Docker container using the following command:
 
    ```bash
-   docker-compose -f docker/docker-compose.yml up
+   docker-compose -f docker/docker-compose.yaml up
    ```
 
 2. Once the container is up and running, you can access the TxTracker application by opening a web browser and navigating to `http://localhost:5173/tx-tracker`.
