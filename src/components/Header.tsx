@@ -105,19 +105,43 @@ const Header: FC<HeaderProps> = ({ hasSearchBar }) => {
               </span>
               <div>
                 <div>
-                  <span>Support me by sending Tokens from EVM-Compatible chains here:</span>
-                  <span
-                    onClick={() =>
-                      window.open(
-                        'https://debank.com/profile/0x07ed706146545d01fa66a3c08ebca8c93a0089e5',
-                        '_blank',
-                      )
-                    }
-                    className="text-white font-bold whitespace-pre-wrap cursor-pointer"
+                  <span>Powered by </span>
+                  <a
+                    href="https://lineascan.build"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white font-bold cursor-pointer"
                   >
-                    {' '}
-                    0x07eD706146545d01Fa66A3C08ebCa8C93a0089E5
-                  </span>
+                    LineaScan
+                  </a>
+                  <span>, </span>
+                  <a
+                    href="https://basescan.org/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white font-bold cursor-pointer"
+                  >
+                    BaseScan
+                  </a>
+                  <span>, </span>
+                  <a
+                    href="https://explorer.mantle.xyz/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white font-bold cursor-pointer"
+                  >
+                    ExplorerMantle
+                  </a>
+                  <span> and </span>
+                  <a
+                    href="https://docs.polygonscan.com/v/polygon-zkevm/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white font-bold cursor-pointer"
+                  >
+                    PolygonScan
+                  </a>
+                  <span> APIs.</span>
                 </div>
               </div>
             </p>
