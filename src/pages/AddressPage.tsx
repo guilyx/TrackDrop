@@ -11,6 +11,7 @@ import FeeCard from '../components/FeeCard.tsx';
 import VolumeCard from '../components/VolumeCard.tsx';
 import BalanceCard from '../components/BalanceCard.tsx';
 import ActivityCard from '../components/ActivityCard.tsx';
+import SupportCard from '../components/SupportCard.tsx';
 import { getTokenPrice } from '../services/tokenPrice.ts';
 
 import MantleExplorerService from '../services/explorers/mantle.ts';
@@ -95,6 +96,9 @@ const AddressPage = () => {
           <InteractionsCard address={address} transactions={selectedTransactions} />
           <VolumeCard address={address} transactions={selectedTransactions} />
           <FeeCard address={address} transactions={selectedTransactions} />
+        </div>
+        <div className="flex items-center flex-row space-x-5 mt-1.5">
+          <SupportCard address="0x07eD706146545d01Fa66A3C08ebCa8C93a0089E5"/>
         </div>
         <div className="flex items-center flex-row space-x-5 mt-1.5">
           <BalanceCard address={address} onTokens={tokens} explorer={explorer}/>
