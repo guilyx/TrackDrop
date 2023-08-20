@@ -41,7 +41,13 @@ const countAllTransactionPeriods = (
   transactions.forEach((transaction) => {
     if (transaction.from.toLowerCase() !== address.toLowerCase()) return;
 
-    const timestamp = new Date(transaction.receivedAt);
+    let timestamp = new Date();
+    if (transaction.receivedAt.length < 12) {
+      timestamp = new Date(Number(transaction.receivedAt)*1000);
+    } else {
+      timestamp = new Date(transaction.receivedAt);
+    }
+
     const year = timestamp.getFullYear();
     const month = timestamp.getMonth();
     const day = timestamp.getDate();
