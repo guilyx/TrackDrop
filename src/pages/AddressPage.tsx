@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Header from '../components/Header.tsx'; // Update the path accordingly
 import ChainTabs from '../components/ChainTabs.tsx'; // Update the path accordingly
 
-import { Transaction, Token } from '../services/explorers/explorer.ts'
+import { Transaction, Token } from '../services/explorers/explorer.ts';
 
 import ExplorerService from '../services/explorers/explorer.ts';
 
@@ -12,7 +12,7 @@ import VolumeCard from '../components/VolumeCard.tsx';
 import BalanceCard from '../components/BalanceCard.tsx';
 import ActivityCard from '../components/ActivityCard.tsx';
 import SupportCard from '../components/SupportCard.tsx';
-import { getTokenPrice } from '../services/tokenPrice.ts';
+import AirdropCard from '../components/AirdropCard.tsx';
 
 import MantleExplorerService from '../services/explorers/mantle.ts';
 import TaikoExplorerService from '../services/explorers/taiko.ts';
@@ -39,14 +39,12 @@ const AddressPage = () => {
   availableExplorers.set('Base', baseService);
   availableExplorers.set('Linea', lineaService);
   availableExplorers.set('Mantle', mantleService);
-  availableExplorers.set("Scroll (TN)", scrollService);
-  availableExplorers.set("Taiko (TN)", taikoService);
-
+  availableExplorers.set('Scroll (TN)', scrollService);
+  availableExplorers.set('Taiko (TN)', taikoService);
 
   const [selectedTab, setSelectedTab] = useState('');
   const [transactionLists, setTransactionLists] = useState<Record<string, Transaction[]>>({});
   const [tokenList, setTokenList] = useState<Record<string, Token[]>>({});
-
 
   useEffect(() => {
     if (!address || address.length !== 42 || address.slice(0, 2) !== '0x') {
@@ -65,8 +63,7 @@ const AddressPage = () => {
 
       newTokenList[tabName] = [];
       newTransactionLists[tabName] = transactions;
-      
-  
+
       // Merge main_token into existing list or create a new one
       if (main_token) {
         newTokenList[tabName].push(main_token);
@@ -89,7 +86,7 @@ const AddressPage = () => {
     const tokens = tokenList[selectedTab] || [];
     let maybe_explorer = availableExplorers.get(selectedTab)?.explorer_url;
     const explorer: string = maybe_explorer !== undefined ? maybe_explorer : '';
-    
+
     return (
       <div className="grid place-items-center">
         <div className="flex items-center flex-row space-x-4">
@@ -98,11 +95,14 @@ const AddressPage = () => {
           <FeeCard address={address} transactions={selectedTransactions} />
         </div>
         <div className="flex items-center flex-row space-x-5 mt-1.5">
-          <SupportCard address="0x07eD706146545d01Fa66A3C08ebCa8C93a0089E5"/>
+          <SupportCard address="0x07eD706146545d01Fa66A3C08ebCa8C93a0089E5" />
         </div>
         <div className="flex items-center flex-row space-x-5 mt-1.5">
-          <BalanceCard address={address} onTokens={tokens} explorer={explorer}/>
+          <BalanceCard address={address} onTokens={tokens} explorer={explorer} />
           <ActivityCard address={address} transactions={selectedTransactions} />
+        </div>
+        <div className="flex items-center flex-row space-x-5 mt-1.5">
+          <AirdropCard address={address} transactions={selectedTransactions} />
         </div>
       </div>
     );
@@ -114,9 +114,7 @@ const AddressPage = () => {
       <div className="grid mt-20 place-items-center">
         <div className="grid place-items-center">
           <ChainTabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-          <div className="flex items-center flex-row space-x-5 mt-1.5">
-            {renderSelectedTabContent()}
-          </div>
+          <div className="flex items-center flex-row space-x-5 mt-1.5">{renderSelectedTabContent()}</div>
         </div>
       </div>
     </>
