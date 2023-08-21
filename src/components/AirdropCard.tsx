@@ -58,7 +58,7 @@ const AirdropCard: FC<AirdropCardProps> = ({ address, transactions }) => {
   };
 
   return (
-    <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 h-auto flex">
+    <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 mb-4 ml-4 mr-4 w-[807px] sm:p-6 dark:bg-gray-800 h-auto flex">
       {/* Left Section */}
       <div className="lg:sticky top-0 flex">
         <div className="flex-1 flex flex-col dark:border-gray-700 pr-4">

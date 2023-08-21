@@ -18,7 +18,7 @@ const SupportCard: FC<SupportCardProps> = ({ address }) => {
   return (
     <>
       <div
-        className="relative mt-1.5 rounded-lg dark:border-gray-700 border border-gray-200 mb-4 ml-4 mr-4 w-[812px] bg-white dark:bg-gray-800 text-center"
+        className="relative mt-1.5 rounded-lg dark:border-gray-700 border border-gray-200 mb-4 ml-4 mr-4 w-[807px] bg-white dark:bg-gray-800 text-center"
         style={{ color: 'white' }}
       >
         <div className="flex justify-between items-center p-3 cursor-pointer" onClick={handleOpen}>
