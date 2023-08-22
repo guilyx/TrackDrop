@@ -50,6 +50,7 @@ export interface Transaction {
 class ExplorerService {
   chain_token: Token;
   explorer_url: string;
+  logo: string;
   name: string;
   tx_in_progress: Map<string, Promise<Transaction[]>> = new Map();
   tx_cache: TransactionsCache = new Map();
@@ -58,8 +59,9 @@ class ExplorerService {
   transfer_in_progress: Map<string, Promise<Transfer[]>> = new Map();
   transfer_cache: TransferCache = new Map();
 
-  constructor(explorer_url: string, name: string, chain_token: Token) {
+  constructor(explorer_url: string, name: string, logo: string, chain_token: Token) {
     this.explorer_url = explorer_url;
+    this.logo = logo;
     this.name = name;
     this.chain_token = chain_token;
   }

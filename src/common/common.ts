@@ -35,3 +35,8 @@ export const ETH_TOKEN: Token = {
     balance: 0.0,
     balanceUsd: undefined,
 }
+
+export interface TabInfo {
+  name: string;
+  logo: string;
+};

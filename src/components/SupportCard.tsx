@@ -1,5 +1,4 @@
-import { FC, useEffect, useState } from 'react';
-import { getTimeAgo } from '../utils/utils.ts';
+import { FC, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 

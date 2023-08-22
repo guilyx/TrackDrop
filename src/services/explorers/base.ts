@@ -5,7 +5,7 @@ import StandardExplorerService from './standard_explorer.ts';
 import { ETH_TOKEN } from '../../common/common.ts';
 class BaseExplorerService extends StandardExplorerService {
   constructor() {
-    super('api.basescan.org', 'base', 'https://base.blockscout.com', ETH_TOKEN);
+    super('api.basescan.org', 'base', "./chains/base.svg", 'https://base.blockscout.com', ETH_TOKEN);
   }
 
   convertToCommonTokens(response: any): Token[] {

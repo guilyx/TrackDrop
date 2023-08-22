@@ -6,7 +6,7 @@ import { ETH_TOKEN } from '../../common/common.ts';
 
 class ScrollExplorerService extends StandardExplorerService {
   constructor() {
-    super('blockscout.scroll.io', 'scroll', 'https://blockscout.scroll.io/', ETH_TOKEN);
+    super('blockscout.scroll.io', 'scroll', "./chains/scroll.svg", 'https://blockscout.scroll.io/', ETH_TOKEN);
   }
 }
 

@@ -3,46 +3,20 @@ import { Transaction } from '../services/explorers/explorer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { getAirdropTasks } from '../utils/criterias.ts';
 
 interface AirdropCardProps {
   address: string;
+  chain_name: string;
+  logo: string;
+  // Maybe add bridge contract ? idk
   transactions: Transaction[] | [];
 }
 
-const dummySubtasks = [
-  { name: 'Subtask 1', completed: true },
-  { name: 'Subtask 2', completed: false },
-];
 
-const tasks = [
-  {
-    name: 'Bridged to Abitrum',
-    completed: false,
-    subtasks: dummySubtasks,
-  },
-  {
-    name: 'Transactions over Time',
-    completed: false,
-    subtasks: dummySubtasks,
-  },
-  {
-    name: 'Transaction Frequency and Interaction',
-    completed: false,
-    subtasks: dummySubtasks,
-  },
-  {
-    name: 'Transaction Value',
-    completed: false,
-    subtasks: dummySubtasks,
-  },
-  {
-    name: 'Assets Bridged to Arbitrum One',
-    completed: false,
-    subtasks: dummySubtasks,
-  },
-];
-
-const AirdropCard: FC<AirdropCardProps> = ({ address, transactions }) => {
+const AirdropCard: FC<AirdropCardProps> = ({ address, transactions, chain_name, logo }) => {
+  const tasks = getAirdropTasks(address, chain_name, transactions);
+  
   const completedSubtasksCount = tasks.reduce((total, task) => {
     return total + task.subtasks.filter((subtask) => subtask.completed).length;
   }, 0);
@@ -63,7 +37,7 @@ const AirdropCard: FC<AirdropCardProps> = ({ address, transactions }) => {
       <div className="lg:sticky top-0 flex">
         <div className="flex-1 flex flex-col dark:border-gray-700 pr-4">
           <div className="flex flex-col justify-start items-center h-full">
-            <img src="./chains/ethereum.svg" alt="Your Description" className="mb-4 w-1/2" />
+            <img src={logo} alt="Your Description" className="mb-4 w-1/2" />
             <div className="flex flex-col items-center">
               <p className={`text-xl font-bold mb-2 ${completedSubtasksCount > 0 ? 'text-blue-500' : 'text-red-500'}`}>
                 {completedSubtasksCount > 0 ? 'Congratulations!' : 'Boo!'}

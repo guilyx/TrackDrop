@@ -1,40 +1,28 @@
 import React from 'react';
-
-interface TabInfo {
-    name: string;
-    logo: string;
-  }
+import { TabInfo } from '../common/common.ts';
 
 interface ChainTabsProps {
+  tabInfo: TabInfo[];
   selectedTab: string;
   setSelectedTab: (tabName: string) => void;
 }
 
-const ChainTabs: React.FC<ChainTabsProps> = ({ selectedTab, setSelectedTab }) => {
-  const tabInfo: TabInfo[] = [
-    { name: 'zkSync', logo: './chains/zksync.svg' },
-    { name: 'Linea', logo: './chains/linea.svg' },
-    { name: 'zkEvm', logo: './chains/zkevm.svg' },
-    { name: 'Mantle', logo: './chains/mantle.svg' },
-    { name: 'Base', logo: './chains/base.svg' },
-    { name: 'Zora (UC)', logo: './chains/zora.svg'},
-    // { name: 'StarkNet (UC)', logo: './chains/starknet.svg' },
-    { name: 'Scroll (TN)', logo: './chains/scroll.svg' },
-    { name: 'Taiko (TN)', logo: './chains/taiko.svg'},
-  ]; // Updated tab names and logo paths
-
+const ChainTabs: React.FC<ChainTabsProps> = ({ tabInfo, selectedTab, setSelectedTab }) => {
   const renderTabButton = (tabInfo: TabInfo) => {
     const isSelected = selectedTab === tabInfo.name;
 
     return (
       <button
-        className={`flex items-center rounded-md p-2 ${
-          isSelected
-            ? 'bg-pink-300 bg-opacity-50 text-white'
-            : 'bg-gray-300 bg-opacity-25 text-white'
-        }`}
-        onClick={() => setSelectedTab(tabInfo.name)}
-      >
+  className={`flex items-center rounded-md p-2 ${
+    isSelected
+      ? 'bg-pink-300 bg-opacity-50 text-white'
+      : 'bg-gray-300 bg-opacity-25 text-white'
+  }`}
+  style={{
+    backgroundColor: isSelected ? 'rgba(224, 114, 255, 0.6)' : '',
+  }}
+  onClick={() => setSelectedTab(tabInfo.name)}
+>
         <img src={tabInfo.logo} alt="" className="h-6 w-6 mr-2" />
         <span className="text-center">{tabInfo.name}</span>
       </button>

@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
+import { BiLoaderCircle } from 'react-icons/bi'; // Import the loading spinner
+
 import Header from '../components/Header.tsx'; // Update the path accordingly
 import ChainTabs from '../components/ChainTabs.tsx'; // Update the path accordingly
+import { TabInfo } from '../common/common.ts';
 
 import { Transaction, Token } from '../services/explorers/explorer.ts';
 
@@ -13,6 +16,7 @@ import BalanceCard from '../components/BalanceCard.tsx';
 import ActivityCard from '../components/ActivityCard.tsx';
 import SupportCard from '../components/SupportCard.tsx';
 import AirdropCard from '../components/AirdropCard.tsx';
+import AddressCard from '../components/AddressCard.tsx';
 
 import MantleExplorerService from '../services/explorers/mantle.ts';
 import TaikoExplorerService from '../services/explorers/taiko.ts';
@@ -24,6 +28,7 @@ import LineaExplorerService from '../services/explorers/linea.ts';
 
 const AddressPage = () => {
   const address = window.location.search.split('=')[1];
+  const [isLoading, setIsLoading] = useState(true); // Add a loading state
 
   const zkSyncService = new ZkSyncExplorerService();
   const zkEvmService = new ZkEvmExplorerService();
@@ -42,6 +47,11 @@ const AddressPage = () => {
   availableExplorers.set('Scroll (TN)', scrollService);
   availableExplorers.set('Taiko (TN)', taikoService);
 
+  const tabsInfos: TabInfo[] = Array.from(availableExplorers).map(([key, explorer]) => ({
+    name: key,
+    logo: explorer.logo,
+  }));
+
   const [selectedTab, setSelectedTab] = useState('');
   const [transactionLists, setTransactionLists] = useState<Record<string, Transaction[]>>({});
   const [tokenList, setTokenList] = useState<Record<string, Token[]>>({});
@@ -54,7 +64,22 @@ const AddressPage = () => {
     fetchAddressInformations();
   }, [address]);
 
+  const [countdown, setCountdown] = useState(15); // Initialize countdown to 15 seconds
+
+  useEffect(() => {
+    if (isLoading) {
+      const timer = setInterval(() => {
+        setCountdown(prevCountdown => prevCountdown - 1); // Decrement countdown
+      }, 1000);
+
+      return () => {
+        clearInterval(timer); // Clear the interval when component unmounts
+      };
+    }
+  }, [isLoading]);
+
   const fetchAddressInformations = async () => {
+    setIsLoading(true); // Set loading state to true before fetching
     const newTransactionLists: Record<string, Transaction[]> = {};
     const newTokenList: Record<string, Token[]> = {};
     for (const [tabName, service] of availableExplorers) {
@@ -71,6 +96,7 @@ const AddressPage = () => {
     }
     setTokenList(newTokenList);
     setTransactionLists(newTransactionLists);
+    setIsLoading(false); // Set loading state to false after fetching
   };
 
   const renderSelectedTabContent = () => {
@@ -84,12 +110,20 @@ const AddressPage = () => {
 
     const selectedTransactions = transactionLists[selectedTab] || [];
     const tokens = tokenList[selectedTab] || [];
-    let maybe_explorer = availableExplorers.get(selectedTab)?.explorer_url;
-    const explorer: string = maybe_explorer !== undefined ? maybe_explorer : '';
+    const srv = availableExplorers.get(selectedTab);
+    if (srv === undefined) {
+      throw new Error(`Explorer Service with name "${selectedTab}" not found`);
+    }
+    const explorer = srv.explorer_url;
+    const logo = srv.logo;
+    const name = srv.name;
 
     return (
       <div className="grid place-items-center">
-        <div className="flex items-center flex-row space-x-4">
+        <div className="flex items-center flex-row space-x-5 mt-1.5">
+          <AddressCard address={address} />
+        </div>
+        <div className="flex items-center flex-row space-x-4 mt-6">
           <InteractionsCard address={address} transactions={selectedTransactions} />
           <VolumeCard address={address} transactions={selectedTransactions} />
           <FeeCard address={address} transactions={selectedTransactions} />
@@ -102,7 +136,7 @@ const AddressPage = () => {
           <ActivityCard address={address} transactions={selectedTransactions} />
         </div>
         <div className="flex items-center flex-row space-x-5 mt-1.5">
-          <AirdropCard address={address} transactions={selectedTransactions} />
+          <AirdropCard address={address} chain_name={name} logo={logo} transactions={selectedTransactions} />
         </div>
       </div>
     );
@@ -113,8 +147,16 @@ const AddressPage = () => {
       <Header hasSearchBar />
       <div className="grid mt-20 place-items-center">
         <div className="grid place-items-center">
-          <ChainTabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-          <div className="flex items-center flex-row space-x-5 mt-1.5">{renderSelectedTabContent()}</div>
+          <ChainTabs tabInfo={tabsInfos} selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center mt-10">
+            <p className="text-gray-500 font-medium">Aggregating blockchain information, please wait...</p>
+            <p className="text-gray-500 font-medium">{countdown} seconds...</p>
+            <BiLoaderCircle className="animate-spin text-blue-500 mt-4" size={80} />
+          </div>
+          ) : (
+            <div className="flex items-center flex-row space-x-5 mt-1.5">{renderSelectedTabContent()}</div>
+          )}
         </div>
       </div>
     </>

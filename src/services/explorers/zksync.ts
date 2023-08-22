@@ -5,7 +5,7 @@ import { getTokenPrice } from '../tokenPrice.ts';
 
 class ZkSyncExplorerService extends ExplorerService {
   constructor() {
-    super('https://explorer.zksync.io', 'zksync', ETH_TOKEN);
+    super('https://explorer.zksync.io', 'zksync', './chains/zksync.svg', ETH_TOKEN);
   }
 
   async getMainToken(address: string): Promise<Token | undefined> {
