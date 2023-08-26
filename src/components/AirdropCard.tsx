@@ -87,7 +87,7 @@ const AirdropCard: FC<AirdropCardProps> = ({ address, transactions, chain_name, 
                             <FontAwesomeIcon icon={faTimes} className="text-red-500" />
                           )}
                         </div>
-                        <p className="text-sm text-gray-600">{subtask.name}</p>
+                        <p className="text-sm text-gray-400">{subtask.name}</p>
                       </div>
                     </li>
                   ))}

@@ -27,6 +27,7 @@ import ZkSyncExplorerService from '../services/explorers/zksync.ts'; // Import t
 import LineaExplorerService from '../services/explorers/linea.ts';
 
 const AddressPage = () => {
+  const addressFetchTimestamps = new Map();
   const address = window.location.search.split('=')[1];
   const [isLoading, setIsLoading] = useState(true); // Add a loading state
 
@@ -44,8 +45,8 @@ const AddressPage = () => {
   availableExplorers.set('Base', baseService);
   availableExplorers.set('Linea', lineaService);
   availableExplorers.set('Mantle', mantleService);
-  availableExplorers.set('Scroll (TN)', scrollService);
-  availableExplorers.set('Taiko (TN)', taikoService);
+  availableExplorers.set('Scroll(TN)', scrollService);
+  availableExplorers.set('Taiko(TN)', taikoService);
 
   const tabsInfos: TabInfo[] = Array.from(availableExplorers).map(([key, explorer]) => ({
     name: key,
@@ -61,10 +62,11 @@ const AddressPage = () => {
       window.location.search = '';
       return;
     }
+
     fetchAddressInformations();
   }, [address]);
 
-  const [countdown, setCountdown] = useState(15); // Initialize countdown to 15 seconds
+  const [countdown, setCountdown] = useState(13); // Initialize countdown to 13 seconds
 
   useEffect(() => {
     if (isLoading) {
@@ -80,20 +82,27 @@ const AddressPage = () => {
 
   const fetchAddressInformations = async () => {
     setIsLoading(true); // Set loading state to true before fetching
+
     const newTransactionLists: Record<string, Transaction[]> = {};
     const newTokenList: Record<string, Token[]> = {};
     for (const [tabName, service] of availableExplorers) {
       const main_token = await service.fetchMainToken(address);
       const transactions = await service.fetchTransactions(address);
 
-      newTokenList[tabName] = [];
       newTransactionLists[tabName] = transactions;
 
       // Merge main_token into existing list or create a new one
       if (main_token) {
-        newTokenList[tabName].push(main_token);
+        newTokenList[tabName] = [main_token];
+
+        if (tabName === "zkSync") {
+          console.log(main_token);
+          console.log(newTokenList);
+        }
       }
     }
+    
+    
     setTokenList(newTokenList);
     setTransactionLists(newTransactionLists);
     setIsLoading(false); // Set loading state to false after fetching
@@ -121,7 +130,7 @@ const AddressPage = () => {
     return (
       <div className="grid place-items-center">
         <div className="flex items-center flex-row space-x-5 mt-1.5">
-          <AddressCard address={address} />
+          <AddressCard address={address} explorer={explorer} />
         </div>
         <div className="flex items-center flex-row space-x-4 mt-6">
           <InteractionsCard address={address} transactions={selectedTransactions} />

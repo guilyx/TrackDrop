@@ -9,27 +9,26 @@ class ZkSyncExplorerService extends ExplorerService {
   }
 
   async getMainToken(address: string): Promise<Token | undefined> {
-    try {
-      const response: AxiosResponse = await axios.get(
-        `https://zksync2-mainnet.zkscan.io/api?module=account&action=balance&address=${address}`,
-      );
+    const res = await axios.post('https://mainnet.era.zksync.io/', {
+      id: 42,
+      jsonrpc: '2.0',
+      method: 'zks_getAllAccountBalances',
+      params: [address],
+    });
 
-      if (response.status === 200) {
-        (this.chain_token.balance = response.data.result),
-          (this.chain_token.price = await getTokenPrice(this.chain_token.contractAddress));
-        if (this.chain_token.price !== undefined) {
-          this.chain_token.balanceUsd =
-            this.chain_token.balance * 10 ** -this.chain_token.decimals * this.chain_token.price;
-        }
-        return this.chain_token;
-      } else {
-        console.error('Error occurred while retrieving %s.', this.chain_token.symbol);
-        return undefined;
-      }
-    } catch (error) {
-      console.error('Error occurred while making the request:', error);
-      return undefined;
+    const targetValue = res.data.result['0x0000000000000000000000000000000000000000'];
+
+    this.chain_token.balance = parseInt(targetValue);
+    this.chain_token.price = await getTokenPrice(this.chain_token.contractAddress);
+    if (this.chain_token.price !== undefined) {
+      this.chain_token.balanceUsd =
+        this.chain_token.balance * 10 ** -this.chain_token.decimals * this.chain_token.price;
     }
+
+    const mtk: Token = {
+      ...this.chain_token
+    }
+    return mtk;
   }
 
   async getTokenList(address: string): Promise<Token[]> {
