@@ -94,11 +94,6 @@ const AddressPage = () => {
       // Merge main_token into existing list or create a new one
       if (main_token) {
         newTokenList[tabName] = [main_token];
-
-        if (tabName === "zkSync") {
-          console.log(main_token);
-          console.log(newTokenList);
-        }
       }
     }
     

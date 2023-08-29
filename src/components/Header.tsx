@@ -24,9 +24,9 @@ const Header: FC<HeaderProps> = ({ hasSearchBar }) => {
   return (
     <nav className="z-10 bg-white border-b border-gray-700 dark:bg-gray-800 fixed top-0 left-0 w-full">
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
-        <a className="flex items-center bg" href="/tx-tracker/">
-          <img src="https://svgshare.com/i/wDF.svg" className="h-8 mr-3" alt="txTracker Logo" />
-          <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">txTracker</span>
+        <a className="flex items-center bg" href="/track-drop/">
+          <img src="https://svgshare.com/i/wDF.svg" className="h-8 mr-3" alt="TrackDrop Logo" />
+          <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">TrackDrop</span>
         </a>
         {hasSearchBar && (
           <div className="flex md:order-2">

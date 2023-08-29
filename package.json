@@ -1,11 +1,11 @@
 {
-  "name": "txtracker",
+  "name": "TrackDrop",
   "private": true,
   "version": "0.1.0",
   "type": "module",
   "author": "Rango",
-  "repository": "https://github.com/guilyx/txtracker",
-  "homepage": "https://guilyx.github.io/txtracker/",
+  "repository": "https://github.com/guilyx/TrackDrop",
+  "homepage": "https://guilyx.github.io/TrackDrop/",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

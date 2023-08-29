@@ -84,6 +84,7 @@ class ZkSyncExplorerService extends ExplorerService {
       try {
         const response: AxiosResponse = await axios.get(url);
         if (response.status === 200) {
+          console.log(response.data.items)
           const data = response.data.items;
           data.forEach((transaction: any) => {
             const { hash, to, from, data, isL1Originated, fee, receivedAt } = transaction;
@@ -117,6 +118,14 @@ class ZkSyncExplorerService extends ExplorerService {
     transfers.forEach((transfer: Transfer) => {
       if (transfer.token === null) return;
       transactions.forEach((transaction: Transaction) => {
+        if (transaction.from.toLowerCase() === "0x57891966931Eb4Bb6FB81430E6cE0A03AAbDe063".toLowerCase()) {
+          console.log("From Bridge!");
+          console.log(transaction);
+        }
+        if (transaction.to.toLowerCase() === "0x57891966931Eb4Bb6FB81430E6cE0A03AAbDe063".toLowerCase()) {
+          console.log("To Bridge!");
+          console.log(transaction);
+        }
         if (transaction.hash === transfer.transactionHash) {
           transaction.transfers.push(transfer);
         }

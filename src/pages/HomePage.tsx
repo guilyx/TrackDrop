@@ -16,9 +16,9 @@ const HomePage = () => {
       <Header />
       <div className="grid mt-36 place-items-center">
         <div className="grid place-items-center">
-          <h1 className="font-bold text-6xl text-black dark:text-white mb-10 ">txTracker</h1>
+          <h1 className="font-bold text-6xl text-black dark:text-white mb-10 ">TrackDrop</h1>
           <p className="text-black dark:text-white font-light text-2xl text-center mr-4 ml-4 max-w-4xl">
-            txTracker is a simple webapp designed to track your transactions on ethereum compatible chains.
+            TrackDrop is a simple webapp designed to track your interactions on Ethereum L2s.
           </p>
           <div className="w-9/12 mt-20">
             <div className="relative">
