@@ -37,6 +37,9 @@ const getDateFromReceivedString = (receivedAt: string,) => {
 };
 
 const getDateFromTransaction = (tx: Transaction,) => {
+  // if (tx === undefined) {
+  //   return new Date();
+  // }
   return getDateFromReceivedString(tx.receivedAt);
 };
 
