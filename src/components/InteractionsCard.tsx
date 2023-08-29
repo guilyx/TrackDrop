@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react';
+import { getDateFromTransaction } from '../utils/utils';
 
 interface InteractionsCardProps {
   address: string;
@@ -15,7 +16,7 @@ const InteractionsCard: FC<InteractionsCardProps> = ({ address, transactions }) 
     transactions.forEach((transaction) => {
       if (transaction.from.toLowerCase() === address.toLowerCase()) {
         setInteractions((prev) => prev + 1);
-        if (new Date(transaction.receivedAt).getTime() >= new Date().getTime() - 86400 * 7 * 1000) {
+        if (getDateFromTransaction(transaction).getTime() >= new Date().getTime() - 86400 * 7 * 1000) {
           setChange((prev) => prev + 1);
         }
       }

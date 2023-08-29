@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { Transaction } from '../services/explorers/explorer.ts';
+import { getDateFromTransaction } from '../utils/utils.ts';
 
 interface FeeCardProps {
   address: string;
@@ -16,7 +17,7 @@ const FeeCard: FC<FeeCardProps> = ({ address, transactions }) => {
     transactions.forEach((transaction) => {
       const tmpFees = parseInt(transaction.fee) * 10 ** -18 * transaction.ethValue;
       setFees((prev) => prev + tmpFees);
-      if (new Date(transaction.receivedAt).getTime() >= new Date().getTime() - 86400 * 7 * 1000) {
+      if (getDateFromTransaction(transaction).getTime() >= new Date().getTime() - 86400 * 7 * 1000) {
         setChange((prev) => prev + tmpFees);
       }
     });

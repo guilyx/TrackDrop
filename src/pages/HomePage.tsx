@@ -18,7 +18,7 @@ const HomePage = () => {
         <div className="grid place-items-center">
           <h1 className="font-bold text-6xl text-black dark:text-white mb-10 ">TrackDrop</h1>
           <p className="text-black dark:text-white font-light text-2xl text-center mr-4 ml-4 max-w-4xl">
-            TrackDrop is a simple webapp designed to track your interactions on Ethereum L2s.
+            TrackDrop is a simple webapp designed to help you track your Airdrop journey on Layer 2s.
           </p>
           <div className="w-9/12 mt-20">
             <div className="relative">

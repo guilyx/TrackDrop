@@ -22,7 +22,7 @@ const SupportCard: FC<SupportCardProps> = ({ address }) => {
       >
         <div className="flex justify-between items-center p-3 cursor-pointer" onClick={handleOpen}>
           <h1 className="text-lg font-bold">
-            <img className="p-2" src="bmc.svg" alt="" width="200" />
+            <img className="p-2" src="bmc-light.svg" alt="" width="200" />
           </h1>
           <div className="pl-3 pr-3">
             {show ? <FontAwesomeIcon icon={faAngleUp} /> : <FontAwesomeIcon icon={faAngleDown} />}

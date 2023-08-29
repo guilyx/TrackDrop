@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { Transaction } from '../services/explorers/explorer';
-import { countAllTransactionPeriods, getTimeAgo } from '../utils/utils';
+import { countAllTransactionPeriods, getDateFromTransaction, getTimeAgo } from '../utils/utils';
 
 interface ActivityCardProps {
   address: string;
@@ -28,7 +28,7 @@ const ActivityCard: FC<ActivityCardProps> = ({ address, transactions }) => {
               <div
                 className={
                   'inline-flex items-center text-base font-semibold ' +
-                  (new Date(transactions[0]?.receivedAt).getTime() < new Date().getTime() - 86400 * 7 * 1000
+                  (getDateFromTransaction(transactions[0]).getTime() < new Date().getTime() - 86400 * 7 * 1000
                     ? 'text-red-500 dark:text-red-400'
                     : 'text-gray-500 dark:text-white')
                 }

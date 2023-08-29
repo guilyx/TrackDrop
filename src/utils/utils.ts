@@ -26,6 +26,20 @@ const getTimeAgo = (date: string) => {
   return Math.round(days) + ' day' + (days === 1 ? '' : 's') + ' ago';
 };
 
+const getDateFromReceivedString = (receivedAt: string,) => {
+  let timestamp = new Date();
+  if (receivedAt.length < 12) {
+    timestamp = new Date(Number(receivedAt)*1000);
+  } else {
+    timestamp = new Date(receivedAt);
+  }
+  return timestamp;
+};
+
+const getDateFromTransaction = (tx: Transaction,) => {
+  return getDateFromReceivedString(tx.receivedAt);
+};
+
 const countAllTransactionPeriods = (
   address: string,
   transactions: Transaction[],
@@ -41,12 +55,7 @@ const countAllTransactionPeriods = (
   transactions.forEach((transaction) => {
     if (transaction.from.toLowerCase() !== address.toLowerCase()) return;
 
-    let timestamp = new Date();
-    if (transaction.receivedAt.length < 12) {
-      timestamp = new Date(Number(transaction.receivedAt)*1000);
-    } else {
-      timestamp = new Date(transaction.receivedAt);
-    }
+    const timestamp = getDateFromTransaction(transaction);
 
     const year = timestamp.getFullYear();
     const month = timestamp.getMonth();
@@ -124,4 +133,4 @@ const getWeekNumber = (date: Date): string => {
   return `${year}-${weekIndex}`;
 };
 
-export { getTimeAgo, countTransactionPeriods, getWeekNumber, countAllTransactionPeriods };
+export { getTimeAgo, countTransactionPeriods, getWeekNumber, countAllTransactionPeriods, getDateFromTransaction, getDateFromReceivedString };
