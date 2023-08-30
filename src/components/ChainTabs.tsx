@@ -1,49 +1,62 @@
 import React from 'react';
-
-interface TabInfo {
-    name: string;
-    logo: string;
-  }
+import { TabInfo } from '../common/common.ts';
 
 interface ChainTabsProps {
+  tabInfo: TabInfo[];
   selectedTab: string;
   setSelectedTab: (tabName: string) => void;
 }
 
-const ChainTabs: React.FC<ChainTabsProps> = ({ selectedTab, setSelectedTab }) => {
-  const tabInfo: TabInfo[] = [
-    { name: 'zkSync', logo: './chains/zksync.svg' },
-    { name: 'Linea', logo: './chains/linea.svg' },
-    { name: 'zkEvm', logo: './chains/zkevm.svg' },
-    { name: 'Mantle', logo: './chains/mantle.svg' },
-    { name: 'Base', logo: './chains/base.svg' },
-    { name: 'Zora (UC)', logo: './chains/zora.svg'},
-    // { name: 'StarkNet (UC)', logo: './chains/starknet.svg' },
-    { name: 'Scroll (TN)', logo: './chains/scroll.svg' },
-    { name: 'Taiko (TN)', logo: './chains/taiko.svg'},
-  ]; // Updated tab names and logo paths
-
+const ChainTabs: React.FC<ChainTabsProps> = ({ tabInfo, selectedTab, setSelectedTab }) => {
   const renderTabButton = (tabInfo: TabInfo) => {
     const isSelected = selectedTab === tabInfo.name;
 
+    const textStyle = isSelected
+      ? { color: 'rgba(255, 255, 255, 1.0)' }
+      : {};
+
     return (
       <button
-        className={`flex items-center rounded-md p-2 ${
+        className={`flex items-center justify-center rounded-md p-2 mx-1 ${
           isSelected
-            ? 'bg-pink-300 bg-opacity-50 text-white'
-            : 'bg-gray-300 bg-opacity-25 text-white'
+            ? 'text-white font-bold'
+            : 'text-gray-700 font-bold hover:text-white transition duration-300 ease-in-out'
         }`}
+        style={{
+          // Set a fixed width for each tab button
+          width: `137px`, // You can adjust the width as needed
+        }}
         onClick={() => setSelectedTab(tabInfo.name)}
       >
-        <img src={tabInfo.logo} alt="" className="h-6 w-6 mr-2" />
-        <span className="text-center">{tabInfo.name}</span>
+        <img src={tabInfo.logo} alt="" className="h-10 w-10 mr-3 ml-3" />
+        <span className="text-center" style={textStyle}>{tabInfo.name}</span>
       </button>
     );
   };
 
+  const rows: JSX.Element[] = [];
+  const maxTabsPerRow = 5;
+
+  for (let i = 0; i < tabInfo.length; i += maxTabsPerRow) {
+    const row = tabInfo.slice(i, i + maxTabsPerRow);
+    const isLastRow = i + maxTabsPerRow >= tabInfo.length;
+
+    const rowElements = row.map((tab) => (
+      <div key={tab.name} className={`mr-4 ${isLastRow ? 'mb-1' : 'mb-5'}`}>
+        {renderTabButton(tab)}
+      </div>
+    ));
+
+    rows.push(
+      <div key={i} className="flex items-center flex-row space-x-0.5 ml-2 mr-2">
+        {rowElements}
+      </div>
+    );
+  }
+
   return (
-    <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-      <div className="flex items-center flex-row space-x-5">{tabInfo.map((tab) => renderTabButton(tab))}</div>
+    <div className="p-4 mb-1 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 w-[807px] sm:p-6 dark:bg-gray-800">
+      {rows}
     </div>
   );
 };

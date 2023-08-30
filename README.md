@@ -1,6 +1,6 @@
-# txTracker
+# TrackDrop
 
-Track your wallet's interactions on chains/protocols that will potentially airdrop their tokens. txTracker is a fork from `zkFlow`.
+Track your wallet's interactions on chains/protocols that will potentially airdrop their tokens. TrackDrop is a fork from `zkFlow`.
 
 ## Features
 
@@ -10,7 +10,7 @@ Track your wallet's interactions on chains/protocols that will potentially airdr
 
 ## Getting Started
 
-To get `txTracker` up and running locally on your machine, follow these steps:
+To get `TrackDrop` up and running locally on your machine, follow these steps:
 
 ### Prerequisites
 
@@ -27,7 +27,7 @@ To get `txTracker` up and running locally on your machine, follow these steps:
 2. Navigate to the project directory:
 
    ```sh
-   cd txtracker
+   cd TrackDrop
    ```
 
 3. Install project dependencies:
@@ -44,7 +44,7 @@ To get `txTracker` up and running locally on your machine, follow these steps:
    npm run dev
    ```
 
-2. Open your browser and navigate to `http://localhost:5173` to view the txTracker web app.
+2. Open your browser and navigate to `http://localhost:5173` to view the TrackDrop web app.
 
 ### Building for Production
 
@@ -62,7 +62,7 @@ I am not a web developer, and have heavily based what I did on `zkFlow`. Credit 
 
 ## Contributing
 
-I come from a different background, I expect to have made a lot of design/architecture mistakes. Never used TS before, with that in mind, **contributions** to `txTracker` are not only welcome, they're heavily encouraged! To contribute:
+I come from a different background, I expect to have made a lot of design/architecture mistakes. Never used TS before, with that in mind, **contributions** to `TrackDrop` are not only welcome, they're heavily encouraged! To contribute:
 
 1. Fork the repository.
 2. Create a new branch for your feature or bug fix.

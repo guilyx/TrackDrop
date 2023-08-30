@@ -6,7 +6,7 @@ import { MANTLE_TOKEN } from '../../common/common.ts';
 
 class MantleExplorerService extends StandardExplorerService {
   constructor() {
-    super('explorer.mantle.xyz', "mantle", 'https://explorer.mantle.xyz/', MANTLE_TOKEN);
+    super('explorer.mantle.xyz', "mantle", "./chains/mantle.svg", 'https://explorer.mantle.xyz/', MANTLE_TOKEN);
   }
 }
 

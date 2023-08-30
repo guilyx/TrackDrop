@@ -1,11 +1,11 @@
 {
-  "name": "txtracker",
+  "name": "TrackDrop",
   "private": true,
   "version": "0.1.0",
   "type": "module",
   "author": "Rango",
-  "repository": "https://github.com/guilyx/txtracker",
-  "homepage": "https://guilyx.github.io/txtracker/",
+  "repository": "https://github.com/guilyx/TrackDrop",
+  "homepage": "https://guilyx.github.io/TrackDrop/",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -20,8 +20,12 @@
     "axios": "^1.4.0",
     "ethers": "^5.7.2",
     "prettier": "^2.8.8",
+    "qrcode.react": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-helmet-async": "^1.3.0",
+    "react-icons": "^4.10.1",
+    "react-loading-skeleton": "^3.3.1",
     "react-router-dom": "^6.11.2"
   },
   "devDependencies": {
