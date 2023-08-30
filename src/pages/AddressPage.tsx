@@ -45,8 +45,8 @@ const AddressPage = () => {
   availableExplorers.set('Base', baseService);
   availableExplorers.set('Linea', lineaService);
   availableExplorers.set('Mantle', mantleService);
-  availableExplorers.set('Scroll(TN)', scrollService);
-  availableExplorers.set('Taiko(TN)', taikoService);
+  availableExplorers.set('Scroll(T)', scrollService);
+  availableExplorers.set('Taiko(T)', taikoService);
 
   const tabsInfos: TabInfo[] = Array.from(availableExplorers).map(([key, explorer]) => ({
     name: key,

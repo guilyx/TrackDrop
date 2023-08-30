@@ -28,6 +28,9 @@ const getTimeAgo = (date: string) => {
 
 const getDateFromReceivedString = (receivedAt: string,) => {
   let timestamp = new Date();
+  if (receivedAt === undefined) {
+    return timestamp;
+  }
   if (receivedAt.length < 12) {
     timestamp = new Date(Number(receivedAt)*1000);
   } else {

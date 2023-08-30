@@ -132,6 +132,24 @@ const Header: FC<HeaderProps> = ({ hasSearchBar }) => {
                   >
                     ExplorerMantle
                   </a>
+                  <span>, </span>
+                  <a
+                    href="https://explorer.zksync.io"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white font-bold cursor-pointer"
+                  >
+                    ExplorerZkSync
+                  </a>
+                  <span>, </span>
+                  <a
+                    href="https://blockscout.scroll.io/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white font-bold cursor-pointer"
+                  >
+                    Blockscout Scroll
+                  </a>
                   <span> and </span>
                   <a
                     href="https://docs.polygonscan.com/v/polygon-zkevm/"

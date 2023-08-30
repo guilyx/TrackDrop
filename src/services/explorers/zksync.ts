@@ -84,7 +84,6 @@ class ZkSyncExplorerService extends ExplorerService {
       try {
         const response: AxiosResponse = await axios.get(url);
         if (response.status === 200) {
-          console.log(response.data.items)
           const data = response.data.items;
           data.forEach((transaction: any) => {
             const { hash, to, from, data, isL1Originated, fee, receivedAt } = transaction;
