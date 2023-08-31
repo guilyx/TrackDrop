@@ -37,7 +37,7 @@ const AirdropCard: FC<AirdropCardProps> = ({ address, transactions, chain_name, 
       <div className="lg:sticky top-0 flex">
         <div className="flex-1 flex flex-col dark:border-gray-700 pr-4">
           <div className="flex flex-col justify-start items-center h-full">
-            <img src={logo} alt="Your Description" className="mb-4 w-1/2" />
+            <img src={logo} alt="Your Description" className="mb-4 w-1/2 max-w-[200px]" />
             <div className="flex flex-col items-center">
               <p className={`text-xl font-bold mb-2 ${completedSubtasksCount > 0 ? 'text-blue-500' : 'text-red-500'}`}>
                 {completedSubtasksCount > 0 ? 'Congratulations!' : 'Boo!'}
