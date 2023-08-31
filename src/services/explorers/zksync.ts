@@ -68,6 +68,11 @@ class ZkSyncExplorerService extends ExplorerService {
     return transfers;
   }
 
+  isFromBridge(tx: Transaction): boolean {
+      if (tx.isL1Originated) return true;
+      return false;
+  }
+
   async getTransactionsList(address: string): Promise<Transaction[]> {
     let url = `https://block-explorer-api.mainnet.zksync.io/transactions?address=${address}&limit=100&page=1`;
     const transactions: Transaction[] = [];
@@ -117,12 +122,8 @@ class ZkSyncExplorerService extends ExplorerService {
     transfers.forEach((transfer: Transfer) => {
       if (transfer.token === null) return;
       transactions.forEach((transaction: Transaction) => {
-        if (transaction.from.toLowerCase() === "0x57891966931Eb4Bb6FB81430E6cE0A03AAbDe063".toLowerCase()) {
+        if (transaction.isL1Originated === true) {
           console.log("From Bridge!");
-          console.log(transaction);
-        }
-        if (transaction.to.toLowerCase() === "0x57891966931Eb4Bb6FB81430E6cE0A03AAbDe063".toLowerCase()) {
-          console.log("To Bridge!");
           console.log(transaction);
         }
         if (transaction.hash === transfer.transactionHash) {

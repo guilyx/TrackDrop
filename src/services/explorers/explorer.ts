@@ -90,6 +90,10 @@ class ExplorerService {
     return this.main_token_cache.get(hash);
   }
 
+  isFromBridge(tx: Transaction): boolean {
+    return false;
+  }
+
   async fetchMainToken(address: string): Promise<Token | undefined> {
     const cachedToken = this.getCacheTk(address);
     if (cachedToken !== undefined) {
