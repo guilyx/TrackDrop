@@ -1,8 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Transaction } from '../services/explorers/explorer.ts';
 import { getDateFromTransaction } from '../utils/utils.ts';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBridge } from '@fortawesome/free-solid-svg-icons';
+import Switch from 'react-switch';
 
 interface VolumeCardProps {
   address: string;
@@ -43,16 +42,19 @@ const VolumeCard: FC<VolumeCardProps> = ({ address, transactions }) => {
     <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
       <div className="flex sm:flex-col items-center sm:space-x-0 xl:flex-row 2xl:flex-col xl:space-x-4 2xl:space-x-0">
         <div className="w-52 max-w-52 text-center flex items-center justify-center">
-          <h3 className="text-l text-gray-900 dark:text-white font-bold">
-            Volume
+          <h3 className="text-xl text-gray-900 dark:text-white font-bold">
+            Volume {showBridgeTransactions ? '(Bridge)' : '(Total)'}
           </h3>
-          <FontAwesomeIcon
-            icon={faBridge}
-            title={`${showBridgeTransactions ? 'Show Total Volume' : 'Show (Native) Bridge Volume'}`}
-            className={`ml-2 cursor-pointer ${
-              showBridgeTransactions ? 'text-blue-500 hover:text-blue-600' : 'text-white hover:text-gray-300'
-            }`}
-            onClick={() => setShowBridgeTransactions(!showBridgeTransactions)}
+          <Switch
+            className="ml-2"
+            checked={showBridgeTransactions}
+            onChange={() => setShowBridgeTransactions(!showBridgeTransactions)}
+            onColor="#5c86f0"
+            offColor="#5c86f0"
+            checkedIcon={false}
+            uncheckedIcon={false}
+            height={18}
+            width={36}
           />
         </div>
         <div className="text-center pt-7">

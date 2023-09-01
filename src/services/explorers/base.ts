@@ -5,7 +5,7 @@ import StandardExplorerService from './standard_explorer.ts';
 import { ETH_TOKEN } from '../../common/common.ts';
 class BaseExplorerService extends StandardExplorerService {
   constructor() {
-    super('api.basescan.org', 'base', "./chains/base.svg", 'https://base.blockscout.com', ETH_TOKEN);
+    super('api.basescan.org', 'base', './chains/base.svg', 'https://base.blockscout.com', ETH_TOKEN);
   }
 
   convertToCommonTokens(response: any): Token[] {
@@ -61,6 +61,13 @@ class BaseExplorerService extends StandardExplorerService {
     if (main_token) tokens.push(main_token);
 
     return tokens;
+  }
+
+  isFromBridge(tx: Transaction): boolean {
+    if (tx.from === tx.to && (tx.data === '0x' || tx.data === '0x01')) {
+      return true;
+    }
+    return false;
   }
 }
 

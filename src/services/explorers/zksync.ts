@@ -122,10 +122,6 @@ class ZkSyncExplorerService extends ExplorerService {
     transfers.forEach((transfer: Transfer) => {
       if (transfer.token === null) return;
       transactions.forEach((transaction: Transaction) => {
-        if (transaction.isL1Originated === true) {
-          console.log("From Bridge!");
-          console.log(transaction);
-        }
         if (transaction.hash === transfer.transactionHash) {
           transaction.transfers.push(transfer);
         }

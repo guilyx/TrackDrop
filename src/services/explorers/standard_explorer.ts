@@ -47,6 +47,7 @@ export interface StandardTransaction {
   gasUsed: string;
   hash: string;
   input: string;
+  methodId: string | null;
   isError: '0' | '1';
   nonce: string;
   timeStamp: string;
@@ -123,12 +124,12 @@ class StandardExplorerService extends ExplorerService {
         hash: specializedTransaction.hash,
         to: specializedTransaction.to,
         from: specializedTransaction.from,
-        data: '',
-        isL1Originated: false, // No L1/L2 distinction in Standard
+        data: specializedTransaction.methodId,
+        isL1Originated: false, // No L1/L2 distinction in Standard, we use this for bridge
         fee: fee.toString(),
         receivedAt: specializedTransaction.timeStamp,
         transfers: [],
-        ethValue: 0,
+        ethValue: parseInt(specializedTransaction.value),
       };
 
       commonTransactions.push(commonTransaction);
@@ -230,18 +231,101 @@ class StandardExplorerService extends ExplorerService {
       }
     }
 
+    if (this.needInternalTx()) {
+      while (true) {
+        try {
+          const response: AxiosResponse = await axios.get(
+            `https://${this.uri}/api?module=account&action=txlistinternal&address=${address}&page=${page}&offset=${limit}`,
+          );
+
+          if (response.status === 200) {
+            const commonTransactions = this.convertToCommonTransactions(response.data.result);
+            for (let ctx of commonTransactions) {
+              if (ctx.fee === 'NaN') ctx.fee = '0';
+            }
+            transactions.push(...commonTransactions);
+
+            if (response.data.result.length < limit) {
+              break;
+            }
+            page++;
+          } else {
+            console.error('Error occurred while retrieving transactions.');
+            break;
+          }
+        } catch (error) {
+          console.error('Error occurred while making the request:', error);
+          break;
+        }
+      }
+    }
+
     const transfers: Transfer[] = await this.getAllTransfers(address);
-    
+
+    if (this.name.toLowerCase() === 'mantle') console.log(transfers);
+
     transfers.forEach((transfer: Transfer) => {
       if (transfer.token === null) return;
+      if (transfer.amount === '' || transfer.amount === undefined) transfer.amount = '0';
+      let matched_tx = false;
+
       transactions.forEach((transaction: Transaction) => {
         if (transaction.hash === transfer.transactionHash) {
           transaction.transfers.push(transfer);
+          matched_tx = true;
         }
       });
+      
+      if (!matched_tx) {
+        const dummy_tx: Transaction = {
+          fee: '0',
+          data: '',
+          ethValue: 0.0,
+          from: transfer.from,
+          to: transfer.to,
+          hash: transfer.transactionHash,
+          receivedAt: transfer.timestamp,
+          transfers: [transfer],
+          isL1Originated: false,
+        };
+        if (this.name.toLowerCase() === "mantle") console.log(dummy_tx);
+        transactions.push(dummy_tx);
+      }
     });
 
+    for (let tx of transactions) {
+      if (this.isFromBridge(tx)) {
+        tx.isL1Originated = true;
+      }
+
+      if (tx.isL1Originated === true && tx.transfers.length === 0) {
+        const l1_transfer: Transfer = {
+          amount: tx.ethValue?.toString() || '',
+          from: tx.from,
+          to: tx.to,
+          tokenAddress: this.chain_token.contractAddress,
+          timestamp: tx.receivedAt,
+          transactionHash: tx.hash,
+          type: 'StandardTransfer',
+          token: {
+            decimals: this.chain_token.decimals,
+            l1Address: '',
+            l2Address: this.chain_token.contractAddress,
+            name: this.chain_token.name,
+            price: this.chain_token.price,
+            symbol: this.chain_token.symbol,
+          },
+          fields: null,
+        };
+        tx.transfers = [l1_transfer];
+      }
+    }
+
+    if (this.name.toLowerCase() === "mantle") console.log(transactions);
+
     await this.assignTransferValues(transactions);
+    if (this.name.toLowerCase() === "mantle") console.log(transactions);
+
     const sortedTransactions = transactions.sort((a, b) => Number(b.receivedAt) - Number(a.receivedAt));
     return sortedTransactions;
   }

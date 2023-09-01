@@ -39,7 +39,7 @@ export interface Transaction {
   hash: string;
   to: string;
   from: string;
-  data: string;
+  data: string | null;
   isL1Originated: boolean;
   fee: string;
   receivedAt: string;
@@ -94,6 +94,10 @@ class ExplorerService {
     return false;
   }
 
+  needInternalTx(): boolean {
+    return false;
+  }
+
   async fetchMainToken(address: string): Promise<Token | undefined> {
     const cachedToken = this.getCacheTk(address);
     if (cachedToken !== undefined) {
@@ -131,7 +135,6 @@ class ExplorerService {
     this.tx_in_progress.delete(address); // Remove from in-progress map
     return token;
   }
-
 
   async fetchTransfers(address: string): Promise<Transfer[]> {
     const cachedTfs = this.getCacheTf(address);
@@ -187,13 +190,15 @@ class ExplorerService {
       transaction.ethValue = getCommonTokenPrice('ETH');
 
       for (const transfer of transaction.transfers) {
-        if (!hasCommonTokenPrice(transfer.token.symbol.toUpperCase())) {
-          const tokenPrice = await getTokenPrice(transfer.tokenAddress);
-          if (tokenPrice !== undefined) {
-            transfer.token.price = tokenPrice;
+        if (transfer.token.symbol !== null) {
+          if (!hasCommonTokenPrice(transfer.token.symbol.toUpperCase())) {
+            const tokenPrice = await getTokenPrice(transfer.tokenAddress);
+            if (tokenPrice !== undefined) {
+              transfer.token.price = tokenPrice;
+            }
+          } else {
+            transfer.token.price = getCommonTokenPrice(transfer.token.symbol.toUpperCase());
           }
-        } else {
-          transfer.token.price = getCommonTokenPrice(transfer.token.symbol.toUpperCase());
         }
       }
 
