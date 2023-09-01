@@ -156,7 +156,7 @@ const AddressPage = () => {
             <div className="flex flex-col items-center justify-center mt-10">
             <p className="text-gray-500 font-medium">Aggregating blockchain information, please wait...</p>
             <p className="text-gray-500 font-medium">{countdown} seconds...</p>
-            <BiLoaderCircle className="animate-spin text-blue-500 mt-4" size={80} />
+            <BiLoaderCircle className="animate-spin mt-4" size={80} style={{ color: '#dd54c4' }} />
           </div>
           ) : (
             <div className="flex items-center flex-row space-x-5 mt-1.5">{renderSelectedTabContent()}</div>

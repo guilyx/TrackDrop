@@ -47,6 +47,7 @@ export interface StandardTransaction {
   gasUsed: string;
   hash: string;
   input: string;
+  methodId: string | null;
   isError: '0' | '1';
   nonce: string;
   timeStamp: string;
@@ -123,12 +124,12 @@ class StandardExplorerService extends ExplorerService {
         hash: specializedTransaction.hash,
         to: specializedTransaction.to,
         from: specializedTransaction.from,
-        data: '',
-        isL1Originated: false, // No L1/L2 distinction in Standard
+        data: specializedTransaction.methodId,
+        isL1Originated: false, // No L1/L2 distinction in Standard, we use this for bridge
         fee: fee.toString(),
         receivedAt: specializedTransaction.timeStamp,
         transfers: [],
-        ethValue: 0,
+        ethValue: parseInt(specializedTransaction.value),
       };
 
       commonTransactions.push(commonTransaction);
@@ -144,7 +145,7 @@ class StandardExplorerService extends ExplorerService {
 
     while (true) {
       try {
-        const response: AxiosResponse = await axios.get(
+        const response: AxiosResponse = await this.throttledApiRequest(
           `https://${this.uri}/api?module=account&action=tokenlist&address=${address}&page=${page}&offset=${limit}`,
         );
 
@@ -176,13 +177,22 @@ class StandardExplorerService extends ExplorerService {
 
     while (true) {
       try {
-        const response: AxiosResponse = await axios.get(
+        const response: AxiosResponse = await this.throttledApiRequest(
           `https://${this.uri}/api?module=account&action=tokentx&address=${address}&page=${page}&offset=${limit}`,
         );
 
         if (response.status === 200) {
           const commonTransfers = this.convertToCommonTransfer(response.data.result);
-          transfers.push(...commonTransfers);
+          for (let ctx of commonTransfers) {
+            if (
+              ctx.transactionHash !== undefined ||
+              ctx.from !== undefined ||
+              ctx.to !== undefined ||
+              ctx.timestamp !== undefined
+            ) {
+              transfers.push(ctx);
+            }
+          }
 
           if (response.data.result.length < limit) {
             break;
@@ -208,13 +218,17 @@ class StandardExplorerService extends ExplorerService {
 
     while (true) {
       try {
-        const response: AxiosResponse = await axios.get(
+        const response: AxiosResponse = await this.throttledApiRequest(
           `https://${this.uri}/api?module=account&action=txlist&address=${address}&page=${page}&offset=${limit}`,
         );
 
         if (response.status === 200) {
           const commonTransactions = this.convertToCommonTransactions(response.data.result);
-          transactions.push(...commonTransactions);
+          for (let tx of commonTransactions) {
+            if (tx.hash !== undefined || tx.from !== undefined || tx.to !== undefined) {
+              transactions.push(tx);
+            }
+          }
 
           if (response.data.result.length < limit) {
             break;
@@ -230,25 +244,104 @@ class StandardExplorerService extends ExplorerService {
       }
     }
 
+    if (this.needInternalTx()) {
+      while (true) {
+        try {
+          const response: AxiosResponse = await this.throttledApiRequest(
+            `https://${this.uri}/api?module=account&action=txlistinternal&address=${address}&page=${page}&offset=${limit}`,
+          );
+
+          if (response.status === 200) {
+            const commonTransactions = this.convertToCommonTransactions(response.data.result);
+            for (let ctx of commonTransactions) {
+              if (ctx.fee === 'NaN') ctx.fee = '0';
+              if (ctx.hash !== undefined || ctx.from !== undefined || ctx.to !== undefined) {
+                transactions.push(ctx);
+              }
+            }
+
+            if (response.data.result.length < limit) {
+              break;
+            }
+            page++;
+          } else {
+            console.error('Error occurred while retrieving transactions.');
+            break;
+          }
+        } catch (error) {
+          console.error('Error occurred while making the request:', error);
+          break;
+        }
+      }
+    }
+
     const transfers: Transfer[] = await this.getAllTransfers(address);
-    
+
     transfers.forEach((transfer: Transfer) => {
       if (transfer.token === null) return;
+      if (transfer.amount === '' || transfer.amount === undefined) transfer.amount = '0';
+      let matched_tx = false;
+
       transactions.forEach((transaction: Transaction) => {
         if (transaction.hash === transfer.transactionHash) {
           transaction.transfers.push(transfer);
+          matched_tx = true;
         }
       });
+
+      if (!matched_tx) {
+        const dummy_tx: Transaction = {
+          fee: '0',
+          data: '',
+          ethValue: 0.0,
+          from: transfer.from,
+          to: transfer.to,
+          hash: transfer.transactionHash,
+          receivedAt: transfer.timestamp,
+          transfers: [transfer],
+          isL1Originated: false,
+        };
+        transactions.push(dummy_tx);
+      }
     });
 
+    for (let tx of transactions) {
+      if (this.isFromBridge(tx)) {
+        tx.isL1Originated = true;
+      }
+
+      if (tx.isL1Originated === true && tx.transfers.length === 0) {
+        const l1_transfer: Transfer = {
+          amount: tx.ethValue?.toString() || '',
+          from: tx.from,
+          to: tx.to,
+          tokenAddress: this.chain_token.contractAddress,
+          timestamp: tx.receivedAt,
+          transactionHash: tx.hash,
+          type: 'StandardTransfer',
+          token: {
+            decimals: this.chain_token.decimals,
+            l1Address: '',
+            l2Address: this.chain_token.contractAddress,
+            name: this.chain_token.name,
+            price: this.chain_token.price,
+            symbol: this.chain_token.symbol,
+          },
+          fields: null,
+        };
+        tx.transfers = [l1_transfer];
+      }
+    }
+
     await this.assignTransferValues(transactions);
+
     const sortedTransactions = transactions.sort((a, b) => Number(b.receivedAt) - Number(a.receivedAt));
     return sortedTransactions;
   }
 
   async getMainToken(address: string): Promise<Token | undefined> {
     try {
-      const response: AxiosResponse = await axios.get(
+      const response: AxiosResponse = await this.throttledApiRequest(
         `https://${this.uri}/api?module=account&action=balance&address=${address}`,
       );
 

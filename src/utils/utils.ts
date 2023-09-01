@@ -59,6 +59,7 @@ const countAllTransactionPeriods = (
   const uniqueMonths: Set<string> = new Set();
 
   transactions.forEach((transaction) => {
+    if (!transaction.from || !transaction.to) return;
     if (transaction.from.toLowerCase() !== address.toLowerCase()) return;
 
     const timestamp = getDateFromTransaction(transaction);
@@ -98,7 +99,6 @@ const countTransactionPeriods = (
 
   transactions.forEach((transaction) => {
     if (
-      protocol !== 'zksynceraportal' &&
       !addresses.includes(transaction.to.toLowerCase()) &&
       !addresses.includes(transaction.from.toLowerCase())
     )

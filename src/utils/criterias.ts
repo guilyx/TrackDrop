@@ -6,12 +6,14 @@ const hasBridged = (transactions: Transaction[] | []) => {
     return false;
   }
 
-  // Filter Bridge Txs ?
+  for (const tx of transactions) {
+    if (tx.isL1Originated === true) return true;
+  }
 
-  return true;
+  return false;
 };
 
-const amountBridged = (bridge_contract: string, transactions: Transaction[] | []) => {
+const amountBridged = (transactions: Transaction[] | []) => {
   if (transactions.length === 0) {
     return 0.0;
   }
@@ -30,9 +32,11 @@ const countTransactions = (transactions: Transaction[] | []) => {
   return transactions.length;
 };
 
-const getVolume = (transactions: Transaction[] | []) => {
+const getVolume = (transactions: Transaction[] | [], bridge_only: boolean) => {
   let volume = 0.0;
   transactions.forEach((transaction) => {
+    if (bridge_only && !transaction.isL1Originated) return;
+
     // For all transfers in transaction.transfer, print amount
     // Highly likely that it fucks up bc tokens have no price tho
     // Move on to new chain until fixed
@@ -53,8 +57,8 @@ const getAirdropTasks = (address: string, chain_name: string, transactions: Tran
   const hasBridgedResult = hasBridged(transactions);
   const months = countDistinctMonths(address, transactions);
   const txs = countTransactions(transactions);
-  const volume = getVolume(transactions);
-  const bridge_volume = amountBridged(address, transactions);
+  const volume = getVolume(transactions, false);
+  const bridge_volume = getVolume(transactions, true);
 
   const tasks = [
     {

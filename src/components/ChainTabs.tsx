@@ -11,25 +11,28 @@ const ChainTabs: React.FC<ChainTabsProps> = ({ tabInfo, selectedTab, setSelected
   const renderTabButton = (tabInfo: TabInfo) => {
     const isSelected = selectedTab === tabInfo.name;
 
-    const textStyle = isSelected
-      ? { color: 'rgba(255, 255, 255, 1.0)' }
-      : {};
+    const buttonStyle = {
+      width: '137px', // You can adjust the width as needed
+      borderColor: isSelected ? 'white' : 'transparent', // Add border color
+      borderWidth: '2px', // Add border width
+    };
+
+    const textStyle = isSelected ? { color: 'rgba(255, 255, 255, 1.0)' } : {};
 
     return (
       <button
-        className={`flex items-center justify-center rounded-md p-2 mx-1 ${
+        className={`flex items-center justify-left rounded-md p-2 mx-1 ${
           isSelected
             ? 'text-white font-bold'
             : 'text-gray-700 font-bold hover:text-white transition duration-300 ease-in-out'
         }`}
-        style={{
-          // Set a fixed width for each tab button
-          width: `137px`, // You can adjust the width as needed
-        }}
+        style={buttonStyle} // Apply the button style here
         onClick={() => setSelectedTab(tabInfo.name)}
       >
-        <img src={tabInfo.logo} alt="" className="h-10 w-10 mr-3 ml-3" />
-        <span className="text-center" style={textStyle}>{tabInfo.name}</span>
+        <img src={tabInfo.logo} alt="" className="h-10 w-10 mr-3" />
+        <span className="text-center" style={textStyle}>
+          {tabInfo.name}
+        </span>
       </button>
     );
   };
@@ -50,7 +53,7 @@ const ChainTabs: React.FC<ChainTabsProps> = ({ tabInfo, selectedTab, setSelected
     rows.push(
       <div key={i} className="flex items-center flex-row space-x-0.5 ml-2 mr-2">
         {rowElements}
-      </div>
+      </div>,
     );
   }
 
