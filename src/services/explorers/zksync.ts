@@ -90,6 +90,7 @@ class ZkSyncExplorerService extends ExplorerService {
         const response: AxiosResponse = await axios.get(url);
         if (response.status === 200) {
           const data = response.data.items;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           data.forEach((transaction: any) => {
             const { hash, to, from, data, isL1Originated, fee, receivedAt } = transaction;
             transactions.push({

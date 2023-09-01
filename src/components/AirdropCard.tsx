@@ -3,7 +3,7 @@ import { Transaction } from '../services/explorers/explorer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { getAirdropTasks } from '../utils/criterias.ts';
+import { getAirdropTasks, SubTask } from '../utils/criterias.ts';
 
 interface AirdropCardProps {
   address: string;
@@ -22,8 +22,7 @@ const AirdropCard: FC<AirdropCardProps> = ({ address, transactions, chain_name, 
   }, 0);
   const [expandedTasks, setExpandedTasks] = useState<boolean[]>(Array(tasks.length).fill(false));
 
-  const isTaskCompleted = (task) => task.subtasks.some((subtask) => subtask.completed);
-  const completedTasksCount = tasks.filter((task) => isTaskCompleted(task)).length;
+  const isTaskCompleted = (task: { name?: string; subtasks: SubTask[]; }) => task.subtasks.some((subtask: { completed: boolean; }) => subtask.completed);
 
   const toggleTaskExpansion = (index: number) => {
     const updatedExpandedTasks = [...expandedTasks];

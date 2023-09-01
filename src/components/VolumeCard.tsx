@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Transaction } from '../services/explorers/explorer.ts';
 import { getDateFromTransaction } from '../utils/utils.ts';
 import Switch from 'react-switch';
@@ -24,13 +24,12 @@ const VolumeCard: FC<VolumeCardProps> = ({ address, transactions }) => {
 
       const transfers = transaction.transfers.sort(
         (a, b) =>
-          parseInt(b.amount) * 10 ** -b.token.decimals * b.token.price -
-          parseInt(a.amount) * 10 ** -a.token.decimals * a.token.price,
+          parseInt(b.amount) * 10 ** -b.token.decimals * Number(b.token.price) -
+          parseInt(a.amount) * 10 ** -a.token.decimals * Number(a.token.price),
       );
       if (transfers.length === 0) return;
-
-      const tmpVolume =
-        parseInt(transfers[0].amount) * 10 ** -transfers[0].token.decimals * transfers[0].token.price;
+      
+      const tmpVolume = parseInt(transfers[0].amount) * 10 ** -transfers[0].token.decimals * Number(transfers[0].token.price);
       setVolume((prev) => prev + tmpVolume);
       if (getDateFromTransaction(transaction).getTime() >= new Date().getTime() - 86400 * 7 * 1000) {
         setChange((prev) => prev + tmpVolume);

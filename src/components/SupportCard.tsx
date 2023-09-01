@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FaClipboard, FaQrcode } from 'react-icons/fa';
@@ -9,7 +9,6 @@ interface SupportCardProps {
 }
 
 const SupportCard: FC<SupportCardProps> = ({ address }) => {
-  const [data, setData] = useState<any>(null);
   const [show, setShow] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showQRCode, setShowQRCode] = useState(false);

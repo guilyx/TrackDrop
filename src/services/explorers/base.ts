@@ -1,13 +1,14 @@
-import axios, { AxiosResponse } from 'axios';
-import { Token, Transfer, Transaction } from './explorer.ts';
-import ExplorerService from './explorer.ts';
 import StandardExplorerService from './standard_explorer.ts';
+import axios from 'axios';
+import { AxiosResponse } from 'axios';
+import { Token } from './explorer.ts';
 import { ETH_TOKEN } from '../../common/common.ts';
+import { Transaction } from '../explorers/explorer.ts';
 class BaseExplorerService extends StandardExplorerService {
   constructor() {
     super('api.basescan.org', 'base', './chains/base.svg', 'https://base.blockscout.com', ETH_TOKEN);
   }
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   convertToCommonTokens(response: any): Token[] {
     const commonTokens: Token[] = [];
 
@@ -32,8 +33,9 @@ class BaseExplorerService extends StandardExplorerService {
     const limit = 100;
     let page = 1;
     const tokens: Token[] = [];
+    let hasMoreTokens = true;
 
-    while (true) {
+    while (hasMoreTokens) {
       try {
         const response: AxiosResponse = await axios.get(
           `https://base.blockscout.com/api/v2/addresses/${address}/token-balances?page=${page}&offset=${limit}`,
@@ -44,15 +46,18 @@ class BaseExplorerService extends StandardExplorerService {
           tokens.push(...commonTokens);
 
           if (response.data.length < limit) {
+            hasMoreTokens = false;
             break;
           }
           page++;
         } else {
           console.error('Error occurred while retrieving tokens.');
+          hasMoreTokens = false;
           break;
         }
       } catch (error) {
         console.error('Error occurred while making the request:', error);
+        hasMoreTokens = false;
         break;
       }
     }

@@ -39,4 +39,4 @@ export const ETH_TOKEN: Token = {
 export interface TabInfo {
   name: string;
   logo: string;
-};
+}

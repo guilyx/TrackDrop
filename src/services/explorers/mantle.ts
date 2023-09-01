@@ -1,8 +1,6 @@
-import axios, { AxiosResponse } from 'axios';
-import { Token, Transfer, Transaction } from './explorer.ts';
-import ExplorerService from './explorer.ts';
 import StandardExplorerService from './standard_explorer.ts';
 import { MANTLE_TOKEN } from '../../common/common.ts';
+import { Transaction } from './explorer.ts';
 
 class MantleExplorerService extends StandardExplorerService {
   constructor() {

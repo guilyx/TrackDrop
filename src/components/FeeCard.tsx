@@ -15,7 +15,7 @@ const FeeCard: FC<FeeCardProps> = ({ address, transactions }) => {
     setChange(0);
     setFees(0);
     transactions.forEach((transaction) => {
-      const tmpFees = parseInt(transaction.fee) * 10 ** -18 * transaction.ethValue;
+      const tmpFees = parseInt(transaction.fee) * 10 ** -18 * Number(transaction.ethValue);
       setFees((prev) => prev + tmpFees);
       if (getDateFromTransaction(transaction).getTime() >= new Date().getTime() - 86400 * 7 * 1000) {
         setChange((prev) => prev + tmpFees);

@@ -1,9 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 import { getDateFromTransaction } from '../utils/utils';
+import { Transaction } from '../services/explorers/explorer';
 
 interface InteractionsCardProps {
   address: string;
-  transactions: any[]; // Replace with the actual type
+  transactions: Transaction[]; // Replace with the actual type
 }
 
 const InteractionsCard: FC<InteractionsCardProps> = ({ address, transactions }) => {

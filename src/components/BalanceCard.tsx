@@ -1,5 +1,4 @@
-import { FC, useContext, useEffect, useState } from 'react';
-import { getTokenPrice } from '../services/tokenPrice.ts';
+import { FC, useEffect, useState } from 'react';
 import { Token } from '../services/explorers/explorer.ts';
 
 interface TokensCardProps {
@@ -31,7 +30,7 @@ const TokensCard: FC<TokensCardProps> = ({ address, onTokens, explorer }) => {
                 if (a.balanceUsd === undefined) return Number(b.balanceUsd);
                 if (b.balanceUsd === undefined) return Number(a.balanceUsd);
                 return Number(a.balanceUsd) - Number(b.balanceUsd);
-            };
+            }
             if (a.type === 'ERC-20' && b.type !== 'ERC-20') return -1;
             if (b.type === 'ERC-20' && a.type !== 'ERC-20') return 1;
             return 0;
