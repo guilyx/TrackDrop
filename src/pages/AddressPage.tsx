@@ -79,15 +79,14 @@ const AddressPage = () => {
     setIsLoading(false); // Set loading state to false after fetching
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!address || address.length !== 42 || address.slice(0, 2) !== '0x') {
       window.location.search = '';
       return;
     }
-    
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     fetchAddressInformations();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
 
   const [countdown, setCountdown] = useState(13); // Initialize countdown to 13 seconds
