@@ -90,7 +90,6 @@ abstract class ExplorerService {
     return this.main_token_cache.get(hash);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isFromBridge(tx: Transaction): boolean {
     tx;
     return false;
@@ -182,17 +181,14 @@ abstract class ExplorerService {
   }
 
   async getMainToken(address: string): Promise<Token | undefined> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     throw new Error('getMainToken method must be implemented in derived class' + address);
   }
 
   async getTokenList(address: string): Promise<Token[]> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     throw new Error('getTransactionsList method must be implemented in derived classes.' + address);
   }
 
   async getAllTransfers(address: string): Promise<Transfer[]> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     throw new Error('getTransactionsList method must be implemented in derived classes.' + address);
   }
 
