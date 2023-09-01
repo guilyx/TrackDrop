@@ -27,7 +27,6 @@ import ZkSyncExplorerService from '../services/explorers/zksync.ts'; // Import t
 import LineaExplorerService from '../services/explorers/linea.ts';
 
 const AddressPage = () => {
-  const addressFetchTimestamps = new Map();
   const address = window.location.search.split('=')[1];
   const [isLoading, setIsLoading] = useState(true); // Add a loading state
 
@@ -57,29 +56,6 @@ const AddressPage = () => {
   const [transactionLists, setTransactionLists] = useState<Record<string, Transaction[]>>({});
   const [tokenList, setTokenList] = useState<Record<string, Token[]>>({});
 
-  useEffect(() => {
-    if (!address || address.length !== 42 || address.slice(0, 2) !== '0x') {
-      window.location.search = '';
-      return;
-    }
-
-    fetchAddressInformations();
-  }, [address]);
-
-  const [countdown, setCountdown] = useState(13); // Initialize countdown to 13 seconds
-
-  useEffect(() => {
-    if (isLoading) {
-      const timer = setInterval(() => {
-        setCountdown(prevCountdown => prevCountdown - 1); // Decrement countdown
-      }, 1000);
-
-      return () => {
-        clearInterval(timer); // Clear the interval when component unmounts
-      };
-    }
-  }, [isLoading]);
-
   const fetchAddressInformations = async () => {
     setIsLoading(true); // Set loading state to true before fetching
 
@@ -102,6 +78,30 @@ const AddressPage = () => {
     setTransactionLists(newTransactionLists);
     setIsLoading(false); // Set loading state to false after fetching
   };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!address || address.length !== 42 || address.slice(0, 2) !== '0x') {
+      window.location.search = '';
+      return;
+    }
+
+    fetchAddressInformations();
+  }, [address]);
+
+  const [countdown, setCountdown] = useState(13); // Initialize countdown to 13 seconds
+
+  useEffect(() => {
+    if (isLoading) {
+      const timer = setInterval(() => {
+        setCountdown(prevCountdown => prevCountdown - 1); // Decrement countdown
+      }, 1000);
+
+      return () => {
+        clearInterval(timer); // Clear the interval when component unmounts
+      };
+    }
+  }, [isLoading]);
 
   const renderSelectedTabContent = () => {
     if (selectedTab == '') {

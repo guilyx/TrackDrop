@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Transaction } from '../services/explorers/explorer.ts';
 import { getDateFromTransaction } from '../utils/utils.ts';
 import Switch from 'react-switch';

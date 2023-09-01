@@ -47,7 +47,7 @@ export interface Transaction {
   ethValue: number | undefined;
 }
 
-class ExplorerService {
+abstract class ExplorerService {
   chain_token: Token;
   explorer_url: string;
   logo: string;
@@ -90,7 +90,9 @@ class ExplorerService {
     return this.main_token_cache.get(hash);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isFromBridge(tx: Transaction): boolean {
+    tx;
     return false;
   }
 
@@ -101,7 +103,7 @@ class ExplorerService {
   async throttledApiRequest(url: string): Promise<AxiosResponse> {
     // Add a delay of 1000ms (1 second) before making the API request
     let throttle_ms = 0;
-    if (this.name.toLowerCase() === "linea") throttle_ms = 3500;
+    if (this.name.toLowerCase() === 'linea') throttle_ms = 3500;
     await new Promise((resolve) => setTimeout(resolve, throttle_ms));
 
     try {
@@ -120,7 +122,10 @@ class ExplorerService {
     }
 
     if (this.main_token_in_progress.has(address)) {
-      return this.main_token_in_progress.get(address)!;
+      const tokenInProgress = this.main_token_in_progress.get(address);
+      if (tokenInProgress !== undefined) {
+        return tokenInProgress as Promise<Token | undefined>;
+      }
     }
 
     const tokenPromise = this.getMainToken(address);
@@ -135,7 +140,7 @@ class ExplorerService {
   async fetchTransactions(address: string): Promise<Transaction[]> {
     const cachedTransactions = this.getCacheTx(address);
     if (cachedTransactions !== undefined) {
-      return cachedTransactions;
+      return cachedTransactions as Transaction[]; // Use the appropriate type
     }
 
     if (this.tx_in_progress.has(address)) {
@@ -154,7 +159,7 @@ class ExplorerService {
   async fetchTransfers(address: string): Promise<Transfer[]> {
     const cachedTfs = this.getCacheTf(address);
     if (cachedTfs !== undefined) {
-      return cachedTfs;
+      return cachedTfs as Transfer[];
     }
 
     if (this.transfer_in_progress.has(address)) {
@@ -233,22 +238,21 @@ class ExplorerService {
   }
 
   async getTransactionsList(address: string): Promise<Transaction[]> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     throw new Error('getTransactionsList method must be implemented in derived classes.' + address);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   convertToCommonTokens(response: any): Token[] {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     throw new Error('convertToCommonTokens method must be implemented in derived classes.' + response);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   convertToCommonTransaction(response: any): Transaction[] {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     throw new Error('convertToCommonTransaction method must be implemented in derived classes.' + response);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   convertToCommonTransfer(response: any): Transfer[] {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     throw new Error('convertToCommonTransfer method must be implemented in derived classes.' + response);
   }
 }

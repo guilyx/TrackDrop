@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { FaClipboard, FaQrcode } from 'react-icons/fa';
 import QRCode from 'qrcode.react';
 

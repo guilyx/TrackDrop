@@ -22,8 +22,7 @@ const AirdropCard: FC<AirdropCardProps> = ({ address, transactions, chain_name, 
   }, 0);
   const [expandedTasks, setExpandedTasks] = useState<boolean[]>(Array(tasks.length).fill(false));
 
-  const isTaskCompleted = (task) => task.subtasks.some((subtask) => subtask.completed);
-  const completedTasksCount = tasks.filter((task) => isTaskCompleted(task)).length;
+  const isTaskCompleted = (task: { name?: string; subtasks: any; }) => task.subtasks.some((subtask: { completed: any; }) => subtask.completed);
 
   const toggleTaskExpansion = (index: number) => {
     const updatedExpandedTasks = [...expandedTasks];

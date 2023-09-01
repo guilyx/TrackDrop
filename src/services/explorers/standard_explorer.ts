@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { Token, Transfer, Transaction } from './explorer.ts';
 import ExplorerService from './explorer.ts';
 import { getTokenPrice } from '../tokenPrice.ts';
@@ -142,8 +142,9 @@ class StandardExplorerService extends ExplorerService {
     const limit = 100;
     let page = 1;
     const tokens: Token[] = [];
+    let hasMoreTokens = true;
 
-    while (true) {
+    while (hasMoreTokens) {
       try {
         const response: AxiosResponse = await this.throttledApiRequest(
           `https://${this.uri}/api?module=account&action=tokenlist&address=${address}&page=${page}&offset=${limit}`,
@@ -154,15 +155,18 @@ class StandardExplorerService extends ExplorerService {
           tokens.push(...commonTokens);
 
           if (response.data.result.length < limit) {
+            hasMoreTokens = false;
             break;
           }
           page++;
         } else {
           console.error('Error occurred while retrieving tokens.');
+          hasMoreTokens = false;
           break;
         }
       } catch (error) {
         console.error('Error occurred while making the request:', error);
+        hasMoreTokens = false;
         break;
       }
     }
@@ -174,8 +178,9 @@ class StandardExplorerService extends ExplorerService {
     const limit = 100;
     let page = 1;
     const transfers: Transfer[] = [];
+    let hasMoreTransfers = true;
 
-    while (true) {
+    while (hasMoreTransfers) {
       try {
         const response: AxiosResponse = await this.throttledApiRequest(
           `https://${this.uri}/api?module=account&action=tokentx&address=${address}&page=${page}&offset=${limit}`,
@@ -183,7 +188,7 @@ class StandardExplorerService extends ExplorerService {
 
         if (response.status === 200) {
           const commonTransfers = this.convertToCommonTransfer(response.data.result);
-          for (let ctx of commonTransfers) {
+          for (const ctx of commonTransfers) {
             if (
               ctx.transactionHash !== undefined ||
               ctx.from !== undefined ||
@@ -195,15 +200,18 @@ class StandardExplorerService extends ExplorerService {
           }
 
           if (response.data.result.length < limit) {
+            hasMoreTransfers = false;
             break;
           }
           page++;
         } else {
           console.error('Error occurred while retrieving transfers.');
+          hasMoreTransfers = false;
           break;
         }
       } catch (error) {
         console.error('Error occurred while making the request:', error);
+        hasMoreTransfers = false;
         break;
       }
     }
@@ -215,8 +223,10 @@ class StandardExplorerService extends ExplorerService {
     const limit = 100;
     let page = 1;
     const transactions: Transaction[] = [];
+    let hasMoreTxs = true;
+    let hasMoreInternalTxs = true;
 
-    while (true) {
+    while (hasMoreTxs) {
       try {
         const response: AxiosResponse = await this.throttledApiRequest(
           `https://${this.uri}/api?module=account&action=txlist&address=${address}&page=${page}&offset=${limit}`,
@@ -224,28 +234,31 @@ class StandardExplorerService extends ExplorerService {
 
         if (response.status === 200) {
           const commonTransactions = this.convertToCommonTransactions(response.data.result);
-          for (let tx of commonTransactions) {
+          for (const tx of commonTransactions) {
             if (tx.hash !== undefined || tx.from !== undefined || tx.to !== undefined) {
               transactions.push(tx);
             }
           }
 
           if (response.data.result.length < limit) {
+            hasMoreTxs = false;
             break;
           }
           page++;
         } else {
           console.error('Error occurred while retrieving transactions.');
+          hasMoreTxs = false;
           break;
         }
       } catch (error) {
         console.error('Error occurred while making the request:', error);
+        hasMoreTxs = false;
         break;
       }
     }
 
     if (this.needInternalTx()) {
-      while (true) {
+      while (hasMoreInternalTxs) {
         try {
           const response: AxiosResponse = await this.throttledApiRequest(
             `https://${this.uri}/api?module=account&action=txlistinternal&address=${address}&page=${page}&offset=${limit}`,
@@ -261,15 +274,18 @@ class StandardExplorerService extends ExplorerService {
             }
 
             if (response.data.result.length < limit) {
+              hasMoreInternalTxs = false;
               break;
             }
             page++;
           } else {
             console.error('Error occurred while retrieving transactions.');
+            hasMoreInternalTxs = false;
             break;
           }
         } catch (error) {
           console.error('Error occurred while making the request:', error);
+          hasMoreInternalTxs = false;
           break;
         }
       }

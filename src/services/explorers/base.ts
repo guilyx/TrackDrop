@@ -3,11 +3,12 @@ import axios from 'axios';
 import { AxiosResponse } from 'axios';
 import { Token } from './explorer.ts';
 import { ETH_TOKEN } from '../../common/common.ts';
+import { Transaction } from '../explorers/explorer.ts';
 class BaseExplorerService extends StandardExplorerService {
   constructor() {
     super('api.basescan.org', 'base', './chains/base.svg', 'https://base.blockscout.com', ETH_TOKEN);
   }
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   convertToCommonTokens(response: any): Token[] {
     const commonTokens: Token[] = [];
 

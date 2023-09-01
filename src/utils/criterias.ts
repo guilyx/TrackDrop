@@ -13,18 +13,10 @@ const hasBridged = (transactions: Transaction[] | []) => {
   return false;
 };
 
-const amountBridged = (transactions: Transaction[] | []) => {
-  if (transactions.length === 0) {
-    return 0.0;
-  }
-
-  // Filter Bridge Txs ?
-
-  return 2000;
-};
-
 const countDistinctMonths = (address: string, transactions: Transaction[] | []) => {
   const { days, weeks, months } = countAllTransactionPeriods(address, transactions);
+  days;
+  weeks;
   return months;
 };
 
@@ -42,12 +34,12 @@ const getVolume = (transactions: Transaction[] | [], bridge_only: boolean) => {
     // Move on to new chain until fixed
     const transfers = transaction.transfers.sort(
       (a, b) =>
-        parseInt(b.amount) * 10 ** -b.token.decimals * b.token.price -
-        parseInt(a.amount) * 10 ** -a.token.decimals * a.token.price,
+        parseInt(b.amount) * 10 ** -b.token.decimals * Number(b.token.price) -
+        parseInt(a.amount) * 10 ** -a.token.decimals * Number(a.token.price),
     );
     if (transfers.length === 0) return;
 
-    const tmpVolume = parseInt(transfers[0].amount) * 10 ** -transfers[0].token.decimals * transfers[0].token.price;
+    const tmpVolume = parseInt(transfers[0].amount) * 10 ** -transfers[0].token.decimals * Number(transfers[0].token.price);
     volume += tmpVolume;
   });
   return volume;
