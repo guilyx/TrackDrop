@@ -49,7 +49,10 @@ export async function getTokenPrice(contract_hash: string): Promise<number | und
   }
 
   if (tokenPriceInProgress.has(contract_hash)) {
-    return tokenPriceInProgress.get(contract_hash)!;
+    const tokenPromise = tokenPriceInProgress.get(contract_hash);
+    if (tokenPromise !== undefined) {
+      return tokenPromise as Promise<number | undefined>;
+    }
   }
 
   const pricePromise = fetchTokenPrice(contract_hash);

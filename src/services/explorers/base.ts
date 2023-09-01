@@ -33,8 +33,9 @@ class BaseExplorerService extends StandardExplorerService {
     const limit = 100;
     let page = 1;
     const tokens: Token[] = [];
+    let hasMoreTokens = true;
 
-    while (true) {
+    while (hasMoreTokens) {
       try {
         const response: AxiosResponse = await axios.get(
           `https://base.blockscout.com/api/v2/addresses/${address}/token-balances?page=${page}&offset=${limit}`,
@@ -45,15 +46,18 @@ class BaseExplorerService extends StandardExplorerService {
           tokens.push(...commonTokens);
 
           if (response.data.length < limit) {
+            hasMoreTokens = false;
             break;
           }
           page++;
         } else {
           console.error('Error occurred while retrieving tokens.');
+          hasMoreTokens = false;
           break;
         }
       } catch (error) {
         console.error('Error occurred while making the request:', error);
+        hasMoreTokens = false;
         break;
       }
     }

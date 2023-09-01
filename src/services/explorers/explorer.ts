@@ -144,7 +144,10 @@ abstract class ExplorerService {
     }
 
     if (this.tx_in_progress.has(address)) {
-      return this.tx_in_progress.get(address)!;
+      const txInProgress = this.tx_in_progress.get(address);
+      if (txInProgress !== undefined) {
+        return txInProgress as Promise<Transaction[]>;
+      }
     }
 
     const txPromise = this.getTransactionsList(address);
@@ -163,7 +166,10 @@ abstract class ExplorerService {
     }
 
     if (this.transfer_in_progress.has(address)) {
-      return this.transfer_in_progress.get(address)!;
+      const tfInProgress = this.transfer_in_progress.get(address);
+      if (tfInProgress !== undefined) {
+        return tfInProgress as Promise<Transfer[]>;
+      }
     }
 
     const tfPromise = this.getAllTransfers(address);

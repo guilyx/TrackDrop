@@ -85,7 +85,8 @@ const AddressPage = () => {
       window.location.search = '';
       return;
     }
-
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     fetchAddressInformations();
   }, [address]);
 

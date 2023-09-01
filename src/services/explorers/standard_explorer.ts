@@ -266,7 +266,7 @@ class StandardExplorerService extends ExplorerService {
 
           if (response.status === 200) {
             const commonTransactions = this.convertToCommonTransactions(response.data.result);
-            for (let ctx of commonTransactions) {
+            for (const ctx of commonTransactions) {
               if (ctx.fee === 'NaN') ctx.fee = '0';
               if (ctx.hash !== undefined || ctx.from !== undefined || ctx.to !== undefined) {
                 transactions.push(ctx);
@@ -321,7 +321,7 @@ class StandardExplorerService extends ExplorerService {
       }
     });
 
-    for (let tx of transactions) {
+    for (const tx of transactions) {
       if (this.isFromBridge(tx)) {
         tx.isL1Originated = true;
       }
