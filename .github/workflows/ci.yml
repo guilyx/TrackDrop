@@ -1,9 +1,9 @@
-name: CI
+name: build
 
 on:
   push:
     branches:
-      - main
+      - dev
 
 jobs:
   build:
