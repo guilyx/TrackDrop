@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { getTokenPrice } from '../tokenPrice.ts';
 import { setCommonTokenPrice, getCommonTokenPrice, hasCommonTokenPrice } from '../../common/common.ts';
 
@@ -98,6 +98,21 @@ class ExplorerService {
     return false;
   }
 
+  async throttledApiRequest(url: string): Promise<AxiosResponse> {
+    // Add a delay of 1000ms (1 second) before making the API request
+    let throttle_ms = 0;
+    if (this.name.toLowerCase() === "linea") throttle_ms = 3500;
+    await new Promise((resolve) => setTimeout(resolve, throttle_ms));
+
+    try {
+      const response: AxiosResponse = await axios.get(url);
+      return response;
+    } catch (error) {
+      console.error('Error occurred while making the request:', error);
+      throw error;
+    }
+  }
+
   async fetchMainToken(address: string): Promise<Token | undefined> {
     const cachedToken = this.getCacheTk(address);
     if (cachedToken !== undefined) {
@@ -182,15 +197,23 @@ class ExplorerService {
     setCommonTokenPrice('LUSD', 1);
     setCommonTokenPrice('ETH', parseInt(ethResponse.data.result));
     setCommonTokenPrice('WETH', parseInt(ethResponse.data.result));
+    setCommonTokenPrice('stETH', parseInt(ethResponse.data.result));
+    setCommonTokenPrice('rETH', parseInt(ethResponse.data.result));
+    setCommonTokenPrice('wstETH', parseInt(ethResponse.data.result));
+    setCommonTokenPrice('eUSD', 1);
+    setCommonTokenPrice('USDR', 1);
     setCommonTokenPrice('lETH', parseInt(ethResponse.data.result));
     setCommonTokenPrice('z0WETH', parseInt(ethResponse.data.result));
     setCommonTokenPrice('BUSD', 1);
+
+    const mantlePrice = await getTokenPrice('0x3c3a81e81dc49A522A592e7622A7E711c06bf354');
+    if (mantlePrice !== undefined) setCommonTokenPrice('MNT', mantlePrice);
 
     transactions.forEach(async (transaction: Transaction) => {
       transaction.ethValue = getCommonTokenPrice('ETH');
 
       for (const transfer of transaction.transfers) {
-        if (transfer.token.symbol !== null) {
+        if (transfer.token.symbol !== null && transfer.token.symbol !== undefined) {
           if (!hasCommonTokenPrice(transfer.token.symbol.toUpperCase())) {
             const tokenPrice = await getTokenPrice(transfer.tokenAddress);
             if (tokenPrice !== undefined) {

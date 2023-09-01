@@ -145,7 +145,7 @@ class StandardExplorerService extends ExplorerService {
 
     while (true) {
       try {
-        const response: AxiosResponse = await axios.get(
+        const response: AxiosResponse = await this.throttledApiRequest(
           `https://${this.uri}/api?module=account&action=tokenlist&address=${address}&page=${page}&offset=${limit}`,
         );
 
@@ -177,13 +177,22 @@ class StandardExplorerService extends ExplorerService {
 
     while (true) {
       try {
-        const response: AxiosResponse = await axios.get(
+        const response: AxiosResponse = await this.throttledApiRequest(
           `https://${this.uri}/api?module=account&action=tokentx&address=${address}&page=${page}&offset=${limit}`,
         );
 
         if (response.status === 200) {
           const commonTransfers = this.convertToCommonTransfer(response.data.result);
-          transfers.push(...commonTransfers);
+          for (let ctx of commonTransfers) {
+            if (
+              ctx.transactionHash !== undefined ||
+              ctx.from !== undefined ||
+              ctx.to !== undefined ||
+              ctx.timestamp !== undefined
+            ) {
+              transfers.push(ctx);
+            }
+          }
 
           if (response.data.result.length < limit) {
             break;
@@ -209,13 +218,17 @@ class StandardExplorerService extends ExplorerService {
 
     while (true) {
       try {
-        const response: AxiosResponse = await axios.get(
+        const response: AxiosResponse = await this.throttledApiRequest(
           `https://${this.uri}/api?module=account&action=txlist&address=${address}&page=${page}&offset=${limit}`,
         );
 
         if (response.status === 200) {
           const commonTransactions = this.convertToCommonTransactions(response.data.result);
-          transactions.push(...commonTransactions);
+          for (let tx of commonTransactions) {
+            if (tx.hash !== undefined || tx.from !== undefined || tx.to !== undefined) {
+              transactions.push(tx);
+            }
+          }
 
           if (response.data.result.length < limit) {
             break;
@@ -234,7 +247,7 @@ class StandardExplorerService extends ExplorerService {
     if (this.needInternalTx()) {
       while (true) {
         try {
-          const response: AxiosResponse = await axios.get(
+          const response: AxiosResponse = await this.throttledApiRequest(
             `https://${this.uri}/api?module=account&action=txlistinternal&address=${address}&page=${page}&offset=${limit}`,
           );
 
@@ -242,8 +255,10 @@ class StandardExplorerService extends ExplorerService {
             const commonTransactions = this.convertToCommonTransactions(response.data.result);
             for (let ctx of commonTransactions) {
               if (ctx.fee === 'NaN') ctx.fee = '0';
+              if (ctx.hash !== undefined || ctx.from !== undefined || ctx.to !== undefined) {
+                transactions.push(ctx);
+              }
             }
-            transactions.push(...commonTransactions);
 
             if (response.data.result.length < limit) {
               break;
@@ -262,8 +277,6 @@ class StandardExplorerService extends ExplorerService {
 
     const transfers: Transfer[] = await this.getAllTransfers(address);
 
-    if (this.name.toLowerCase() === 'mantle') console.log(transfers);
-
     transfers.forEach((transfer: Transfer) => {
       if (transfer.token === null) return;
       if (transfer.amount === '' || transfer.amount === undefined) transfer.amount = '0';
@@ -275,7 +288,7 @@ class StandardExplorerService extends ExplorerService {
           matched_tx = true;
         }
       });
-      
+
       if (!matched_tx) {
         const dummy_tx: Transaction = {
           fee: '0',
@@ -288,7 +301,6 @@ class StandardExplorerService extends ExplorerService {
           transfers: [transfer],
           isL1Originated: false,
         };
-        if (this.name.toLowerCase() === "mantle") console.log(dummy_tx);
         transactions.push(dummy_tx);
       }
     });
@@ -321,10 +333,7 @@ class StandardExplorerService extends ExplorerService {
       }
     }
 
-    if (this.name.toLowerCase() === "mantle") console.log(transactions);
-
     await this.assignTransferValues(transactions);
-    if (this.name.toLowerCase() === "mantle") console.log(transactions);
 
     const sortedTransactions = transactions.sort((a, b) => Number(b.receivedAt) - Number(a.receivedAt));
     return sortedTransactions;
@@ -332,7 +341,7 @@ class StandardExplorerService extends ExplorerService {
 
   async getMainToken(address: string): Promise<Token | undefined> {
     try {
-      const response: AxiosResponse = await axios.get(
+      const response: AxiosResponse = await this.throttledApiRequest(
         `https://${this.uri}/api?module=account&action=balance&address=${address}`,
       );
 

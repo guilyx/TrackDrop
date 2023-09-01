@@ -21,7 +21,7 @@ const ChainTabs: React.FC<ChainTabsProps> = ({ tabInfo, selectedTab, setSelected
 
     return (
       <button
-        className={`flex items-center justify-center rounded-md p-2 mx-1 ${
+        className={`flex items-center justify-left rounded-md p-2 mx-1 ${
           isSelected
             ? 'text-white font-bold'
             : 'text-gray-700 font-bold hover:text-white transition duration-300 ease-in-out'
@@ -29,7 +29,7 @@ const ChainTabs: React.FC<ChainTabsProps> = ({ tabInfo, selectedTab, setSelected
         style={buttonStyle} // Apply the button style here
         onClick={() => setSelectedTab(tabInfo.name)}
       >
-        <img src={tabInfo.logo} alt="" className="h-10 w-10 mr-3 ml-3" />
+        <img src={tabInfo.logo} alt="" className="h-10 w-10 mr-3" />
         <span className="text-center" style={textStyle}>
           {tabInfo.name}
         </span>

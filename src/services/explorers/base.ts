@@ -64,6 +64,7 @@ class BaseExplorerService extends StandardExplorerService {
   }
 
   isFromBridge(tx: Transaction): boolean {
+    if (!tx.from) return false;
     if (tx.from === tx.to && (tx.data === '0x' || tx.data === '0x01')) {
       return true;
     }
