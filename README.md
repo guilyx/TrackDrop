@@ -1,8 +1,8 @@
 # TrackDrop
-![CI/CD](https://github.com/guilyx/trackdrop/workflows/deploy/badge.svg)
+[![build](https://github.com/guilyx/TrackDrop/actions/workflows/build.yml/badge.svg)](https://github.com/guilyx/TrackDrop/actions/workflows/build.yml)
+[![build](https://github.com/guilyx/TrackDrop/actions/workflows/deploy.yml/deploy.svg)](https://github.com/guilyx/TrackDrop/actions/workflows/deploy.yml)
 [![codecov](https://codecov.io/gh/guilyx/trackdrop/branch/master/graph/badge.svg)](https://codecov.io/gh/guilyx/trackdrop)
-![License](https://img.shields.io/github/license/guilyx/trackdrop)
-
+ [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 Track your wallet's interactions on chains/protocols that will potentially airdrop their tokens. TrackDrop is a fork from `zkFlow`.
 
 ## Features
