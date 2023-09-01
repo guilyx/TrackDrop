@@ -7,6 +7,8 @@
   "repository": "https://github.com/guilyx/TrackDrop",
   "homepage": "https://guilyx.github.io/TrackDrop/",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -19,6 +21,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "axios": "^1.4.0",
     "ethers": "^5.7.2",
+    "gh-pages": "^6.0.0",
     "prettier": "^2.8.8",
     "qrcode.react": "^3.1.0",
     "react": "^18.2.0",

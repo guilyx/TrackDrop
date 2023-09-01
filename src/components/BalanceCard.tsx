@@ -1,5 +1,4 @@
-import { FC, useContext, useEffect, useState } from 'react';
-import { getTokenPrice } from '../services/tokenPrice.ts';
+import { FC, useEffect, useState } from 'react';
 import { Token } from '../services/explorers/explorer.ts';
 
 interface TokensCardProps {

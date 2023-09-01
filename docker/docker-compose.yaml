@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  txTracker:
+    image: node:18-alpine
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../:/app
