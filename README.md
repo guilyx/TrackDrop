@@ -1,7 +1,8 @@
 # TrackDrop
-![CI/CD](https://github.com/guilyx/trackdrop/workflows/deploy/badge.svg)
+[![build](https://github.com/guilyx/TrackDrop/actions/workflows/build.yml/badge.svg)](https://github.com/guilyx/TrackDrop/actions/workflows/build.yml)
+![vercel](https://vercelbadge.vercel.app/api/guilyx/trackdrop)
 [![codecov](https://codecov.io/gh/guilyx/trackdrop/branch/master/graph/badge.svg)](https://codecov.io/gh/guilyx/trackdrop)
-![License](https://img.shields.io/github/license/guilyx/trackdrop)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Track your wallet's interactions on chains/protocols that will potentially airdrop their tokens. TrackDrop is a fork from `zkFlow`.
 
@@ -15,9 +16,9 @@ Track your wallet's interactions on chains/protocols that will potentially airdr
 
 To get `TrackDrop` up and running locally on your machine, follow these steps:
 
-### Running the TxTracker Docker Container
+### Running the TrackDrop Docker Container
 
-The TxTracker Docker container allows you to run the application in an isolated environment.
+The TrackDrop Docker container allows you to run the application in an isolated environment.
 Follow these steps to build and run the Docker container:
 
 ### Prerequisites
@@ -46,7 +47,7 @@ Before you begin, make sure you have the following software installed on your sy
    docker-compose -f docker/docker-compose.yml build
    ```
 
-   This command will use the `Dockerfile` located in the `docker` directory to build the Docker image named `txtracker`.
+   This command will use the `Dockerfile` located in the `docker` directory to build the Docker image named `trackdrop`.
 
 ### Run the Docker Container
 
@@ -56,19 +57,17 @@ Before you begin, make sure you have the following software installed on your sy
    docker-compose -f docker/docker-compose.yml up
    ```
 
-2. Once the container is up and running, you can access the TxTracker application by opening a web browser and navigating to `http://localhost:5173/tx-tracker`.
+2. Once the container is up and running, you can access the TrackDrop application by opening a web browser and navigating to `http://localhost:5173`.
 
 ### Stopping and Removing the Container
 
-When you're done using the TxTracker application, you can stop and remove the Docker container:
+When you're done using the TrackDrop application, you can stop and remove the Docker container:
 
 1. Run the following command to stop and remove the Docker container:
 
    ```bash
    docker-compose -f docker/docker-compose.yml down
    ```
-
-2. Open your browser and navigate to `http://localhost:5173` to view the TrackDrop web app.
 
 ### Additional Notes
 
@@ -77,11 +76,11 @@ When you're done using the TxTracker application, you can stop and remove the Do
 
 ---
 
-With these instructions, you should be able to build and run the TxTracker Docker container on your system. If you encounter any issues, refer to the Docker documentation or seek assistance from your development team.
+With these instructions, you should be able to build and run the TrackDrop Docker container on your system. If you encounter any issues, refer to the Docker documentation or seek assistance from your development team.
 
 ## Disclaimer
 
-I am not a web developer, and have heavily based what I did on `zkFlow`. Credit goes to them for the squeletton and design of the web app. 
+I am not a web developer, and have heavily based what I did on `zkFlow`. Credit goes to them for the squeletton and design premises of the web app. 
 
 ## Contributing
 
