@@ -89,7 +89,7 @@ const AddressPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
 
-  const [countdown, setCountdown] = useState(15); // Initialize countdown to 13 seconds
+  const [countdown, setCountdown] = useState(20); // Initialize countdown to 13 seconds
 
   useEffect(() => {
     if (isLoading) {
