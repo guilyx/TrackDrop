@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { FaTwitter } from 'react-icons/fa';
 
 interface HeaderProps {
   hasSearchBar?: boolean;
@@ -27,6 +28,10 @@ const Header: FC<HeaderProps> = ({ hasSearchBar }) => {
         <a className="flex items-center bg" href="/">
           <img src="trackdrop.svg" className="h-8 mr-3" alt="TrackDrop Logo" />
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">TrackDrop</span>
+          <a href="https://twitter.com/rangonomics" target="_blank" rel="noopener noreferrer">
+            {/* Twitter icon with margin */}
+            <FaTwitter size={24} color="#5c86f0" style={{ marginLeft: '430px' }} />
+          </a>
         </a>
         {hasSearchBar && (
           <div className="flex md:order-2">
