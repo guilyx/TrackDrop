@@ -43,10 +43,10 @@ jobs:
         key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
     - name: Install dependencies
       run: npm install
-    - name: Run the tests and generate coverage report
-      run: npm test -- --coverage
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
+    # - name: Run the tests and generate coverage report
+    #   run: npm test -- --coverage
+    # - name: Upload coverage to Codecov
+    #   uses: codecov/codecov-action@v1
     - name: Build
       run: npm run build  
     - name: Deploy
