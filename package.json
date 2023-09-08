@@ -5,7 +5,7 @@
   "type": "module",
   "author": "Rango",
   "repository": "https://github.com/guilyx/TrackDrop",
-  "homepage": "https://guilyx.github.io/TrackDrop/",
+  "homepage": "trackdrop.xyz/",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
