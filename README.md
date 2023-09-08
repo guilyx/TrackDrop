@@ -2,7 +2,7 @@
 [![build](https://github.com/guilyx/TrackDrop/actions/workflows/build.yml/badge.svg)](https://github.com/guilyx/TrackDrop/actions/workflows/build.yml)
 ![vercel](https://vercelbadge.vercel.app/api/guilyx/trackdrop)
 [![codecov](https://codecov.io/gh/guilyx/trackdrop/branch/master/graph/badge.svg)](https://codecov.io/gh/guilyx/trackdrop)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 Track your wallet's interactions on chains/protocols that will potentially airdrop their tokens. TrackDrop is a fork from `zkFlow`.
 
@@ -93,4 +93,16 @@ I come from a different background, I expect to have made a lot of design/archit
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [GPLv3 License](LICENSE).
+
+```
+1. Anyone can copy, modify and distribute this software.
+2. You have to include the license and copyright notice with each and every distribution.
+3. You can use this software privately.
+4. You can use this software for commercial purposes.
+5. If you dare build your business solely from this code, you risk open-sourcing the whole code base.
+6. If you modify it, you have to indicate changes made to the code.
+7. Any modifications of this code base MUST be distributed with the same license, GPLv3.
+8. This software is provided without warranty.
+9. The software author or license can not be held liable for any damages inflicted by the software.
+```
