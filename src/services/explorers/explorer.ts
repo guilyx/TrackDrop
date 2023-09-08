@@ -102,7 +102,7 @@ abstract class ExplorerService {
   async throttledApiRequest(url: string): Promise<AxiosResponse> {
     // Add a delay of 1000ms (1 second) before making the API request
     let throttle_ms = 0;
-    if (this.name.toLowerCase() === 'linea') throttle_ms = 1250;
+    if (this.name.toLowerCase() === 'linea') throttle_ms = 500;
     await new Promise((resolve) => setTimeout(resolve, throttle_ms));
 
     try {
