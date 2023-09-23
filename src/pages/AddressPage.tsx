@@ -26,7 +26,8 @@ import ZkEvmExplorerService from '../services/explorers/zkevm.ts';
 import ZkSyncExplorerService from '../services/explorers/zksync.ts'; // Import the appropriate services
 import LineaExplorerService from '../services/explorers/linea.ts';
 import ZoraExplorerService from '../services/explorers/zora.ts';
-import NovaExplorerService from '../services/explorers/nova.ts';
+// import ZetaExplorerService from '../services/explorers/zetachain.ts';
+// import NovaExplorerService from '../services/explorers/nova.ts';
 
 const AddressPage = () => {
   const address = window.location.search.split('=')[1];
@@ -40,7 +41,8 @@ const AddressPage = () => {
   const taikoService = new TaikoExplorerService();
   const scrollService = new ScrollExplorerService();
   const zoraService = new ZoraExplorerService();
-  const novaService = new NovaExplorerService();
+  // const novaService = new NovaExplorerService();
+  // const zetaService = new ZetaExplorerService();
 
   const availableExplorers: Map<string, ExplorerService> = new Map();
   availableExplorers.set('zkSync', zkSyncService);
@@ -52,6 +54,7 @@ const AddressPage = () => {
   // availableExplorers.set('Nova', novaService);
   availableExplorers.set('Scroll(T)', scrollService);
   availableExplorers.set('Taiko(T)', taikoService);
+  // availableExplorers.set('Zeta(T)', zetaService);
 
   const tabsInfos: TabInfo[] = Array.from(availableExplorers).map(([key, explorer]) => ({
     name: key,
