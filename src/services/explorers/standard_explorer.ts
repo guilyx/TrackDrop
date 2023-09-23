@@ -59,7 +59,7 @@ export interface StandardTransaction {
 
 class StandardExplorerService extends ExplorerService {
   uri: string;
-  address: string = '';
+  address = '';
 
   constructor(uri: string, name: string, logo: string, explorer_url: string, chain_token: Token) {
     super(explorer_url, name, logo, chain_token);
