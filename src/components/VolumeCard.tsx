@@ -39,7 +39,7 @@ const VolumeCard: FC<VolumeCardProps> = ({ address, transactions }) => {
 
   return (
     <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-      <div className="flex sm:flex-col items-center sm:space-x-0 xl:flex-row 2xl:flex-col xl:space-x-4 2xl:space-x-0">
+      <div className="flex sm:flex-col items-center sm:space-x-0 xl:flex-row 2xl:flex-col xl:space-x-4 2xl:space-x-0 ">
         <div className="w-52 max-w-52 text-center flex items-center justify-center">
           <h3 className="text-xl text-gray-900 dark:text-white font-bold">
             Volume {showBridgeTransactions ? '(Bridge)' : '(Total)'}
