@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react';
 import { FaTwitter, FaGithub } from 'react-icons/fa';
-import { FiMail } from 'react-icons/fi'
 
 interface HeaderProps {
   hasSearchBar?: boolean;
