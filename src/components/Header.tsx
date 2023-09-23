@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
-import { FaTwitter } from 'react-icons/fa';
+import { FaTwitter, FaGithub } from 'react-icons/fa';
+import { FiMail } from 'react-icons/fi'
 
 interface HeaderProps {
   hasSearchBar?: boolean;
@@ -28,14 +29,18 @@ const Header: FC<HeaderProps> = ({ hasSearchBar }) => {
         <a className="flex items-center bg" href="/">
           <img src="trackdrop.svg" className="h-8 mr-3" alt="TrackDrop Logo" />
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">TrackDrop</span>
-          <a href="https://twitter.com/rangonomics" target="_blank" rel="noopener noreferrer">
+          <a href="https://twitter.com/rangonomics" target="_blank" rel="noopener noreferrer" className="flex items-center ml-10 mr-3">
             {/* Twitter icon with margin */}
-            <FaTwitter size={24} color="#5c86f0" style={{ marginLeft: '430px' }} />
+            <FaTwitter size={24} color="#5c86f0"/>
+          </a>
+          <a href="https://github.com/guilyx/TrackDrop" target="_blank" rel="noopener noreferrer" className="flex items-center ml-3 mr-3">
+            {/* Twitter icon with margin */}
+            <FaGithub size={24} color="#5c86f0"/>
           </a>
         </a>
         {hasSearchBar && (
           <div className="flex md:order-2">
-            <div className="relative md:block sm:w-9/12 md:w-96">
+            <div className="relative md:block sm:w-9/12 md:w-96 ml-10">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none bg">
                 <svg
                   className="w-5 h-5 text-gray-500"

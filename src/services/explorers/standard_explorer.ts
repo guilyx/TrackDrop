@@ -59,10 +59,15 @@ export interface StandardTransaction {
 
 class StandardExplorerService extends ExplorerService {
   uri: string;
+  address: string = '';
 
   constructor(uri: string, name: string, logo: string, explorer_url: string, chain_token: Token) {
     super(explorer_url, name, logo, chain_token);
     this.uri = uri;
+  }
+
+  setAddress(address: string) {
+    this.address = address;
   }
 
   convertToCommonTokens(response: StandardToken[]): Token[] {
@@ -220,6 +225,8 @@ class StandardExplorerService extends ExplorerService {
   }
 
   async getTransactionsList(address: string): Promise<Transaction[]> {
+    this.setAddress(address);
+
     const limit = 100;
     let page = 1;
     const transactions: Transaction[] = [];
@@ -352,6 +359,7 @@ class StandardExplorerService extends ExplorerService {
     await this.assignTransferValues(transactions);
 
     const sortedTransactions = transactions.sort((a, b) => Number(b.receivedAt) - Number(a.receivedAt));
+    if (this.name === "nova") console.log(sortedTransactions);
     return sortedTransactions;
   }
 
