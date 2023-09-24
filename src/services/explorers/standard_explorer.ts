@@ -272,9 +272,13 @@ class StandardExplorerService extends ExplorerService {
           );
 
           if (response.status === 200) {
+            let i = 0;
             const commonTransactions = this.convertToCommonTransactions(response.data.result);
             for (const ctx of commonTransactions) {
               if (ctx.fee === 'NaN') ctx.fee = '0';
+              if (response.data.result[i].transactionHash && ctx.hash == undefined) {
+                ctx.hash = response.data.result[i].transactionHash;
+              }
               if (ctx.hash !== undefined || ctx.from !== undefined || ctx.to !== undefined) {
                 transactions.push(ctx);
               }
@@ -359,7 +363,6 @@ class StandardExplorerService extends ExplorerService {
     await this.assignTransferValues(transactions);
 
     const sortedTransactions = transactions.sort((a, b) => Number(b.receivedAt) - Number(a.receivedAt));
-    if (this.name === "nova") console.log(sortedTransactions);
     return sortedTransactions;
   }
 
