@@ -282,6 +282,7 @@ class StandardExplorerService extends ExplorerService {
               if (ctx.hash !== undefined || ctx.from !== undefined || ctx.to !== undefined) {
                 transactions.push(ctx);
               }
+              i += 1;
             }
 
             if (response.data.result.length < limit) {
