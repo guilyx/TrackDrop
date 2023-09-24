@@ -59,10 +59,15 @@ export interface StandardTransaction {
 
 class StandardExplorerService extends ExplorerService {
   uri: string;
+  address = '';
 
   constructor(uri: string, name: string, logo: string, explorer_url: string, chain_token: Token) {
     super(explorer_url, name, logo, chain_token);
     this.uri = uri;
+  }
+
+  setAddress(address: string) {
+    this.address = address;
   }
 
   convertToCommonTokens(response: StandardToken[]): Token[] {
@@ -220,6 +225,8 @@ class StandardExplorerService extends ExplorerService {
   }
 
   async getTransactionsList(address: string): Promise<Transaction[]> {
+    this.setAddress(address);
+
     const limit = 100;
     let page = 1;
     const transactions: Transaction[] = [];
@@ -265,12 +272,17 @@ class StandardExplorerService extends ExplorerService {
           );
 
           if (response.status === 200) {
+            let i = 0;
             const commonTransactions = this.convertToCommonTransactions(response.data.result);
             for (const ctx of commonTransactions) {
               if (ctx.fee === 'NaN') ctx.fee = '0';
+              if (response.data.result[i].transactionHash && ctx.hash == undefined) {
+                ctx.hash = response.data.result[i].transactionHash;
+              }
               if (ctx.hash !== undefined || ctx.from !== undefined || ctx.to !== undefined) {
                 transactions.push(ctx);
               }
+              i += 1;
             }
 
             if (response.data.result.length < limit) {
