@@ -52,7 +52,7 @@ const AddressPage = () => {
   availableExplorers.set('Mantle', mantleService);
   availableExplorers.set('Zora', zoraService);
   // availableExplorers.set('Nova', novaService);
-  availableExplorers.set('Scroll(T)', scrollService);
+  availableExplorers.set('Scroll', scrollService);
   availableExplorers.set('Taiko(T)', taikoService);
   // availableExplorers.set('Zeta(T)', zetaService);
 

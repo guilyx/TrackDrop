@@ -3,13 +3,7 @@ import { ETH_TOKEN } from '../../common/common.ts';
 import { Transaction } from './explorer.ts';
 class ScrollExplorerService extends StandardExplorerService {
   constructor() {
-    super(
-      'sepolia-blockscout.scroll.io',
-      'scroll',
-      './chains/scroll.svg',
-      'https://sepolia-blockscout.scroll.io/',
-      ETH_TOKEN,
-    );
+    super('blockscout.scroll.io', 'scroll', './chains/scroll.svg', 'https://blockscout.scroll.io/', ETH_TOKEN);
   }
 
   needInternalTx(): boolean {
@@ -18,7 +12,9 @@ class ScrollExplorerService extends StandardExplorerService {
 
   isFromBridge(tx: Transaction): boolean {
     if (!tx.from) return false;
-    if (tx.from.toLowerCase() === '0x91e8addfe1358aca5314c644312d38237fc1101c'.toLowerCase()) {
+    if (tx.from.toLowerCase() === '0xE4eDb277e41dc89aB076a1F049f4a3EfA700bCE8'.toLowerCase()) {
+      return true;
+    } else if (tx.to.toLowerCase() === '0xE4eDb277e41dc89aB076a1F049f4a3EfA700bCE8'.toLowerCase()) {
       return true;
     }
     return false;
