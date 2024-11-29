@@ -193,27 +193,26 @@ abstract class ExplorerService {
   }
 
   async assignTransferValues(transactions: Transaction[]) {
-    const ethResponse = await axios.post('https://mainnet.era.zksync.io/', {
-      id: 42,
-      jsonrpc: '2.0',
-      method: 'zks_getTokenPrice',
-      params: ['0x0000000000000000000000000000000000000000'],
-    });
+    const ethPrice = await getTokenPrice('0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2');
+    if (ethPrice === undefined) {
+      console.error("Failed to fetch ETH price.");
+      return;
+    }
 
     setCommonTokenPrice('USDC', 1);
     setCommonTokenPrice('USDT', 1);
     setCommonTokenPrice('ZKUSD', 1);
     setCommonTokenPrice('CEBUSD', 1);
     setCommonTokenPrice('LUSD', 1);
-    setCommonTokenPrice('ETH', parseInt(ethResponse.data.result));
-    setCommonTokenPrice('WETH', parseInt(ethResponse.data.result));
-    setCommonTokenPrice('stETH', parseInt(ethResponse.data.result));
-    setCommonTokenPrice('rETH', parseInt(ethResponse.data.result));
-    setCommonTokenPrice('wstETH', parseInt(ethResponse.data.result));
+    setCommonTokenPrice('ETH', ethPrice);
+    setCommonTokenPrice('WETH', ethPrice);
+    setCommonTokenPrice('stETH', ethPrice);
+    setCommonTokenPrice('rETH', ethPrice);
+    setCommonTokenPrice('wstETH', ethPrice);
     setCommonTokenPrice('eUSD', 1);
     setCommonTokenPrice('USDR', 1);
-    setCommonTokenPrice('lETH', parseInt(ethResponse.data.result));
-    setCommonTokenPrice('z0WETH', parseInt(ethResponse.data.result));
+    setCommonTokenPrice('lETH', ethPrice);
+    setCommonTokenPrice('z0WETH', ethPrice);
     setCommonTokenPrice('BUSD', 1);
 
     const mantlePrice = await getTokenPrice('0x3c3a81e81dc49A522A592e7622A7E711c06bf354');

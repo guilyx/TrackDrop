@@ -47,6 +47,7 @@ export interface StandardTransaction {
   gasUsed: string;
   hash: string;
   input: string;
+  isL1Originated: boolean;
   methodId: string | null;
   isError: '0' | '1';
   nonce: string;
@@ -125,12 +126,13 @@ class StandardExplorerService extends ExplorerService {
       const gas_price = Number(specializedTransaction.gasPrice);
       const gas = Number(specializedTransaction.gasUsed);
       const fee = gas * gas_price;
+
       const commonTransaction: Transaction = {
         hash: specializedTransaction.hash,
         to: specializedTransaction.to,
         from: specializedTransaction.from,
         data: specializedTransaction.methodId,
-        isL1Originated: false, // No L1/L2 distinction in Standard, we use this for bridge
+        isL1Originated: specializedTransaction.isL1Originated ?? false,
         fee: fee.toString(),
         receivedAt: specializedTransaction.timeStamp,
         transfers: [],
