@@ -9,16 +9,17 @@ class ZkSyncExplorerService extends ExplorerService {
   }
 
   async getMainToken(address: string): Promise<Token | undefined> {
-    const res = await axios.post('https://mainnet.era.zksync.io/', {
-      id: 42,
-      jsonrpc: '2.0',
-      method: 'zks_getAllAccountBalances',
-      params: [address],
-    });
 
-    const targetValue = res.data.result['0x0000000000000000000000000000000000000000'];
+    let url = `block-explorer-api.mainnet.zksync.io/api?module=account&action=balance&address=${address}`;
+    const response: AxiosResponse = await axios.get(url);
 
-    this.chain_token.balance = parseInt(targetValue);
+    if (response.status !== 200) {
+      return this.chain_token;
+    }
+
+    const data = response.result;
+    
+    this.chain_token.balance = parseInt(data.result);
     this.chain_token.price = await getTokenPrice(this.chain_token.contractAddress);
     if (this.chain_token.price !== undefined) {
       this.chain_token.balanceUsd =
