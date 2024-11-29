@@ -120,26 +120,29 @@ class StandardExplorerService extends ExplorerService {
 
   convertToCommonTransactions(response: StandardTransaction[]): Transaction[] {
     const commonTransactions: Transaction[] = [];
-
+  
     for (const specializedTransaction of response) {
       const gas_price = Number(specializedTransaction.gasPrice);
       const gas = Number(specializedTransaction.gasUsed);
       const fee = gas * gas_price;
+  
       const commonTransaction: Transaction = {
         hash: specializedTransaction.hash,
         to: specializedTransaction.to,
         from: specializedTransaction.from,
         data: specializedTransaction.methodId,
-        isL1Originated: false, // No L1/L2 distinction in Standard, we use this for bridge
+        isL1Originated: specializedTransaction.isL1Originated !== undefined 
+                          ? specializedTransaction.isL1Originated === '1' 
+                          : false, // Check if isL1Originated exists and parse its value
         fee: fee.toString(),
         receivedAt: specializedTransaction.timeStamp,
         transfers: [],
         ethValue: parseInt(specializedTransaction.value),
       };
-
+  
       commonTransactions.push(commonTransaction);
     }
-
+  
     return commonTransactions;
   }
 
