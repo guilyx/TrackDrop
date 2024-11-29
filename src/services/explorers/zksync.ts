@@ -10,15 +10,15 @@ class ZkSyncExplorerService extends ExplorerService {
 
   async getMainToken(address: string): Promise<Token | undefined> {
 
-    let url = `block-explorer-api.mainnet.zksync.io/api?module=account&action=balance&address=${address}`;
+    let url = `https://block-explorer-api.mainnet.zksync.io/api?module=account&action=balance&address=${address}`;
     const response: AxiosResponse = await axios.get(url);
 
     if (response.status !== 200) {
       return this.chain_token;
     }
 
-    const data = response.result;
-    
+    const data = response.data;
+
     this.chain_token.balance = parseInt(data.result);
     this.chain_token.price = await getTokenPrice(this.chain_token.contractAddress);
     if (this.chain_token.price !== undefined) {
@@ -78,12 +78,11 @@ class ZkSyncExplorerService extends ExplorerService {
     let url = `https://block-explorer-api.mainnet.zksync.io/transactions?address=${address}&limit=100&page=1`;
     const transactions: Transaction[] = [];
 
-    const ethResponse = await axios.post('https://mainnet.era.zksync.io/', {
-      id: 42,
-      jsonrpc: '2.0',
-      method: 'zks_getTokenPrice',
-      params: ['0x0000000000000000000000000000000000000000'],
-    });
+    const ethPrice = await getTokenPrice('0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2');
+    if (ethPrice === undefined) {
+      console.error("Failed to fetch ETH price.");
+      return [];
+    }
 
     // eslint-disable-next-line no-constant-condition
     while (true) {
@@ -103,7 +102,7 @@ class ZkSyncExplorerService extends ExplorerService {
               fee: fee,
               receivedAt: receivedAt,
               transfers: [],
-              ethValue: parseInt(ethResponse.data.result),
+              ethValue: ethPrice,
             });
           });
 
