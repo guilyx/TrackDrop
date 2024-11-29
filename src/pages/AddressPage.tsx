@@ -35,10 +35,10 @@ const AddressPage = () => {
 
   const zkSyncService = new ZkSyncExplorerService();
   const zkEvmService = new ZkEvmExplorerService();
-  const baseService = new BaseExplorerService();
+  // const baseService = new BaseExplorerService();
   const lineaService = new LineaExplorerService();
-  const mantleService = new MantleExplorerService();
-  const taikoService = new TaikoExplorerService();
+  // const mantleService = new MantleExplorerService();
+  // const taikoService = new TaikoExplorerService();
   const scrollService = new ScrollExplorerService();
   const zoraService = new ZoraExplorerService();
   // const novaService = new NovaExplorerService();
@@ -47,13 +47,13 @@ const AddressPage = () => {
   const availableExplorers: Map<string, ExplorerService> = new Map();
   availableExplorers.set('zkSync', zkSyncService);
   availableExplorers.set('zkEvm', zkEvmService);
-  availableExplorers.set('Base', baseService);
+  // availableExplorers.set('Base', baseService);
   availableExplorers.set('Linea', lineaService);
-  availableExplorers.set('Mantle', mantleService);
+  // availableExplorers.set('Mantle', mantleService);
   availableExplorers.set('Zora', zoraService);
   // availableExplorers.set('Nova', novaService);
   availableExplorers.set('Scroll', scrollService);
-  availableExplorers.set('Taiko(T)', taikoService);
+  // availableExplorers.set('Taiko(T)', taikoService);
   // availableExplorers.set('Zeta(T)', zetaService);
 
   const tabsInfos: TabInfo[] = Array.from(availableExplorers).map(([key, explorer]) => ({
@@ -81,8 +81,8 @@ const AddressPage = () => {
         newTokenList[tabName] = [main_token];
       }
     }
-    
-    
+
+
     setTokenList(newTokenList);
     setTransactionLists(newTransactionLists);
     setIsLoading(false); // Set loading state to false after fetching

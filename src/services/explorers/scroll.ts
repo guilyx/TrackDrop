@@ -3,7 +3,7 @@ import { ETH_TOKEN } from '../../common/common.ts';
 import { Transaction } from './explorer.ts';
 class ScrollExplorerService extends StandardExplorerService {
   constructor() {
-    super('blockscout.scroll.io', 'scroll', './chains/scroll.svg', 'https://blockscout.scroll.io/', ETH_TOKEN);
+    super('api.scrollscan.com', 'scroll', './chains/scroll.svg', 'https://blockscout.scroll.io/', ETH_TOKEN);
   }
 
   needInternalTx(): boolean {
