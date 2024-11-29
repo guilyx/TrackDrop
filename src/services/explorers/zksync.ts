@@ -9,8 +9,7 @@ class ZkSyncExplorerService extends ExplorerService {
   }
 
   async getMainToken(address: string): Promise<Token | undefined> {
-
-    let url = `https://block-explorer-api.mainnet.zksync.io/api?module=account&action=balance&address=${address}`;
+    const url = `https://block-explorer-api.mainnet.zksync.io/api?module=account&action=balance&address=${address}`;
     const response: AxiosResponse = await axios.get(url);
 
     if (response.status !== 200) {
